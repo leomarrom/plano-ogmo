@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0f2e4a">
+<title>Plano OGMO</title>
+<style>
+:root{
+  --navy:#0f2e4a; --azul:#1f6fb2; --azul2:#e8f1fa; --laranja:#f28c28; --laranja2:#fff3e6;
+  --verde:#2e9e5b; --verde2:#e7f6ee; --bg:#f2f4f7; --card:#fff; --txt:#1b2733; --sub:#5d6b7a; --linha:#e3e8ee;
+  --top:env(safe-area-inset-top,0px); --bot:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px}
+body{padding-bottom:calc(76px + var(--bot))}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+a{color:var(--azul)}
+header{background:var(--navy);color:#fff;padding:calc(18px + var(--top)) 18px 22px;border-radius:0 0 22px 22px}
+header .ola{font-size:22px;font-weight:700;margin:0}
+header .data{opacity:.8;margin-top:2px;font-size:15px}
+.barra{height:10px;background:rgba(255,255,255,.18);border-radius:9px;overflow:hidden;margin-top:14px}
+.barra i{display:block;height:100%;background:var(--laranja);border-radius:9px;transition:width .4s}
+.barra-txt{display:flex;justify-content:space-between;font-size:13px;opacity:.9;margin-top:6px}
+main{padding:14px 14px 0;max-width:640px;margin:0 auto}
+.card{background:var(--card);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(15,46,74,.07)}
+.card h2{margin:0 0 2px;font-size:18px;display:flex;align-items:center;gap:8px}
+.card .meta{color:var(--sub);font-size:14px;margin-bottom:10px}
+.aviso{background:var(--laranja2);border-left:4px solid var(--laranja);padding:12px 14px;border-radius:12px;font-size:15px;margin-bottom:14px}
+.ok{background:var(--verde2);border-left:4px solid var(--verde);padding:12px 14px;border-radius:12px;font-size:15px;margin-bottom:14px}
+.item{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--linha)}
+.item:first-of-type{border-top:0}
+.chk{flex:0 0 34px;height:34px;border-radius:50%;border:2.5px solid #b8c4d1;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.chk svg{width:18px;height:18px;opacity:0}
+.chk.on{background:var(--verde);border-color:var(--verde)}
+.chk.on svg{opacity:1}
+.item .corpo{flex:1;min-width:0}
+.item .tit{font-weight:650;line-height:1.3}
+.item.feito .tit{color:var(--sub);text-decoration:line-through}
+.item .desc{color:var(--sub);font-size:14px;margin-top:3px;line-height:1.35}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--azul2);color:var(--azul);margin-right:6px;vertical-align:1px}
+.tag.min{background:#eef0f3;color:var(--sub)}
+.acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:10px;background:var(--azul2);color:var(--azul);font-size:14px;font-weight:600;text-decoration:none}
+.btn.cheio{background:var(--azul);color:#fff}
+.btn.laranja{background:var(--laranja);color:#fff}
+.btn.verde{background:var(--verde);color:#fff}
+.btn.cinza{background:#eef0f3;color:var(--txt)}
+.btn.grande{width:100%;justify-content:center;padding:14px;font-size:16px;border-radius:14px}
+.btn.perigo{background:#fdecec;color:#c0392b}
+.ex{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px dashed var(--linha)}
+.ex:first-child{border-top:0}
+.ex .q{flex:0 0 auto;font-size:13px;padding:5px 10px}
+.vazio{text-align:center;padding:26px 10px;color:var(--sub)}
+.vazio .grande{font-size:40px}
+.amanha{font-size:14px;color:var(--sub);line-height:1.5}
+.amanha b{color:var(--txt)}
+nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--linha);display:flex;padding-bottom:var(--bot);z-index:10}
+nav button{flex:1;padding:9px 0 10px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;color:var(--sub);font-weight:600}
+nav button svg{width:24px;height:24px}
+nav button.on{color:var(--azul)}
+.tela{display:none}.tela.on{display:block}
+.anel{display:flex;align-items:center;gap:18px}
+.anel svg{flex:0 0 110px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.stat{background:var(--bg);border-radius:14px;padding:12px}
+.stat b{display:block;font-size:22px}
+.stat span{font-size:13px;color:var(--sub)}
+.mat{margin:10px 0}
+.mat .l{display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px}
+.mat .b{height:9px;background:#eef0f3;border-radius:9px;overflow:hidden}
+.mat .b i{display:block;height:100%;border-radius:9px}
+.mapa{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.mapa .sem{grid-column:1/-1;font-size:13px;color:var(--sub);font-weight:600;margin-top:6px}
+.cel{height:30px;border-radius:7px;background:#eef0f3;font-size:11px;display:flex;align-items:center;justify-content:center;color:var(--sub);font-weight:600}
+.cel.f{background:var(--verde);color:#fff}
+.cel.a{background:var(--azul);color:#fff}
+.cel.v{background:transparent}
+table.t{width:100%;border-collapse:collapse;font-size:14px}
+table.t td,table.t th{padding:8px 4px;border-top:1px solid var(--linha);text-align:left}
+table.t th{color:var(--sub);font-weight:600;border-top:0}
+label.campo{display:block;font-size:14px;color:var(--sub);margin:12px 0 5px;font-weight:600}
+.inp{width:100%;padding:12px;border:1.5px solid var(--linha);border-radius:12px;background:#fff;color:var(--txt);font-size:16px}
+textarea.inp{min-height:76px;resize:vertical}
+.linha2{display:flex;gap:10px}.linha2>*{flex:1}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.chip{padding:7px 12px;border-radius:20px;background:#eef0f3;font-size:13px;font-weight:600}
+.chip.on{background:var(--navy);color:#fff}
+.erro{border-top:1px solid var(--linha);padding:12px 0}
+.erro:first-child{border-top:0}
+.erro .e{font-weight:600}
+.erro .r{margin-top:4px;color:var(--verde);font-size:15px}
+.erro .rod{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:12px;color:var(--sub)}
+.modal{position:fixed;inset:0;background:rgba(10,25,40,.5);display:none;align-items:flex-end;justify-content:center;z-index:20}
+.modal.on{display:flex}
+.folha{background:#fff;width:100%;max-width:640px;max-height:88vh;overflow:auto;border-radius:22px 22px 0 0;padding:20px 18px calc(22px + var(--bot))}
+.folha h3{margin:0 0 10px;font-size:20px}
+.folha p{line-height:1.5}
+.menu-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-top:1px solid var(--linha);font-weight:600;width:100%;text-align:left}
+.menu-item:first-of-type{border-top:0}
+.menu-item span{color:var(--sub);font-weight:400;font-size:14px}
+.peq{font-size:13px;color:var(--sub);line-height:1.45}
+.onb{position:fixed;inset:0;background:var(--navy);color:#fff;z-index:30;overflow:auto;padding:calc(30px + var(--top)) 22px calc(30px + var(--bot));display:none}
+.onb.on{display:block}
+.onb h1{font-size:28px;margin:0 0 8px}
+.onb p{opacity:.9;line-height:1.5}
+.onb label.campo{color:#cfe0f0}
+.onb .inp{border-color:transparent}
+.onb ul{padding-left:20px;line-height:1.6;opacity:.95}
+.teste{background:var(--laranja2);border-radius:12px;padding:12px;margin-top:10px}
+.teste b{display:block;margin-bottom:6px}
+.toast{position:fixed;left:50%;bottom:calc(92px + var(--bot));transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:11px 18px;border-radius:12px;font-size:14px;opacity:0;transition:all .25s;z-index:40;pointer-events:none;max-width:90%;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<header id="topo">
+  <p class="ola" id="ola">Olá!</p>
+  <div class="data" id="dataHoje"></div>
+  <div class="barra"><i id="barraDia" style="width:0"></i></div>
+  <div class="barra-txt"><span>Progresso de hoje</span><span id="pctDia">0%</span></div>
+</header>
+
+<main>
+  <section class="tela on" id="t-hoje"></section>
+  <section class="tela" id="t-prog"></section>
+  <section class="tela" id="t-cad"></section>
+  <section class="tela" id="t-mais"></section>
+</main>
+
+<nav>
+  <button data-t="hoje" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18M8.5 15l2.5 2.5 4.5-5"/></svg>Hoje</button>
+  <button data-t="prog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Progresso</button>
+  <button data-t="cad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h12a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4z"/><path d="M8 9h8M8 13h6"/></svg>Caderno</button>
+  <button data-t="mais"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Mais</button>
+</nav>
+
+<div class="modal" id="modal"><div class="folha" id="folha"></div></div>
+<div class="onb" id="onb"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* ================== PLANO ================== */
+const STUDY = [
+ // Semana 1
+ {p:['Português','Interpretação de texto: ideia central, secundária e inferência'], s:['Inglês','Estratégias de leitura: cognatos, falsos cognatos e palavras-chave']},
+ {p:['Matemática','Números inteiros, operações e expressões'], s:['Informática','Windows: área de trabalho, pastas e arquivos']},
+ {p:['Português','Ortografia (novo acordo) e acentuação'], s:['Inglês','Pronomes, artigos e verbo to be']},
+ {p:['Matemática','Frações e decimais'], s:['Legislação','Lei 12.815/2013: visão geral (porto organizado, operador portuário)']},
+ {p:['Matemática','MMC e MDC'], s:['Inglês','Presente simples e presente contínuo']},
+ // Semana 2
+ {p:['Português','Classes de palavras I: substantivo, adjetivo, artigo, numeral e pronome'], s:['Inglês','Passado simples']},
+ {p:['Matemática','Razão e proporção'], s:['Informática','Atalhos do Windows, lixeira e extensões de arquivo']},
+ {p:['Português','Classes de palavras II: verbo, advérbio, preposição e conjunção'], s:['Inglês','Futuro: will e going to']},
+ {p:['Matemática','Regra de três simples e composta'], s:['Legislação','Lei 12.815: o OGMO e suas atribuições (arts. 32 e 33)']},
+ {p:['Matemática','Porcentagem: aumentos, descontos e problemas'], s:['Informática','Word: formatação, salvar e imprimir']},
+ // Semana 3
+ {p:['Português','Pontuação: uso da vírgula'], s:['Inglês','Modais: can, must, should e may']},
+ {p:['Matemática','Juros simples'], s:['Informática','Word: tabelas, cabeçalho e revisão']},
+ {p:['Português','Concordância verbal'], s:['Inglês','Preposições de lugar e de tempo']},
+ {p:['Matemática','Juros compostos'], s:['Legislação','Lei 12.815: trabalho portuário (capatazia, estiva, conferência, conserto, vigilância, bloco; registro e cadastro)']},
+ {p:['Matemática','Sistema métrico e conversões'], s:['Inglês','Vocabulário do navio: ship, vessel, deck, hold, bow, stern, crew']},
+ // Semana 4
+ {p:['Português','Concordância nominal'], s:['Inglês','Vocabulário do porto: berth, pier, dock, harbor, quay, warehouse']},
+ {p:['Matemática','Perímetro e área'], s:['Informática','Excel: células, SOMA, MÉDIA e referências']},
+ {p:['Português','Regência verbal e nominal'], s:['Inglês','Carga e equipamentos: cargo, container, crane, forklift, hatch, mooring, load/unload']},
+ {p:['Matemática','Equação do 1º grau e problemas'], s:['Legislação','Lei 9.719/1998: escala, remuneração e segurança do trabalhador avulso']},
+ {p:['Matemática','Produtos notáveis, fatoração e polinômios'], s:['Informática','Excel: SE, MÁXIMO, MÍNIMO, gráficos e filtros']},
+ // Semana 5
+ {p:['Português','Crase'], s:['Inglês','Vocabulário de segurança: hazard, warning, PPE, helmet, gloves, emergency']},
+ {p:['Matemática','Equação do 2º grau (Bhaskara)'], s:['Informática','PowerPoint e impressoras']},
+ {p:['Português','Colocação pronominal + coesão e coerência (conectivos)'], s:['Inglês','Interpretação de avisos e placas']},
+ {p:['Matemática','Teorema de Pitágoras e geometria espacial (volume de caixa e cilindro)'], s:['Legislação','NR-29: objetivos, responsabilidades do OGMO, SESSTP e CPATP']},
+ {p:['Matemática','Função do 1º grau e função quadrática'], s:['Inglês','Interpretação de textos técnicos curtos']},
+ // Semana 6
+ {p:['Português','Semântica (sinônimos, parônimos, homônimos, denotação e conotação) + figuras de linguagem'], s:['Inglês','Interpretação de diálogos']},
+ {p:['Matemática','Função exponencial e logaritmo (só o básico)'], s:['Informática','Internet e e-mail: navegadores, CC, CCO e anexos']},
+ {p:['Português','Período composto: orações coordenadas e subordinadas'], s:['Inglês','Questões misturadas de inglês da banca IDCAP']},
+ {p:['Matemática','Análise combinatória e probabilidade'], s:['Legislação','NR-29: EPIs e operações de carga + questões de outros OGMOs']},
+ {p:['Matemática','Estatística: média, moda e mediana'], s:['Informática','Segurança: vírus, phishing, senhas e backup']},
+ // Semana 7
+ {q:1, p:['Português','Questões da banca IDCAP, assuntos misturados'], s:['Inglês','Questões da banca IDCAP']},
+ {q:1, p:['Matemática','Questões: porcentagem, regra de três, juros e equações'], s:['Informática','Questões da banca IDCAP']},
+ {sim:1, p:['Simulado','Simulado 1: 50 questões de uma prova anterior de OGMO (site do IDCAP), em 2 horas']},
+ {q:1, p:['Simulado','Corrigir o simulado 1 e passar todos os erros para o caderno'], s:['Revisão','Revisar a matéria em que mais errou no simulado']},
+ {q:1, p:['Matemática','Questões: geometria, funções, probabilidade e estatística'], s:['Legislação','Questões + releitura dos resumos']},
+ // Semana 8
+ {q:1, p:['Português','Revisão: caderno de erros e resumos'], s:['Inglês','Revisão: caderno de erros e vocabulário']},
+ {q:1, p:['Matemática','Revisão: caderno de erros e resumos'], s:['Informática','Revisão: caderno de erros']},
+ {sim:2, p:['Simulado','Simulado 2: 50 questões de outra prova de OGMO, em 2 horas']},
+ {q:1, p:['Simulado','Corrigir o simulado 2 e comparar com o simulado 1'], s:['Legislação','Revisão de Legislação']},
+ {q:1, p:['Revisão','Revisão final: caderno de erros das 3 matérias em que mais errou'], s:['Revisão','Anotar as 3 matérias mais fracas para o modo manutenção']},
+];
+
+const FORCA = {
+ 1:['Flexão de braço 3 × 6 a 10 (pode apoiar o joelho)','Abdominal supra 3 × 15','Prancha 3 × 20 s'],
+ 2:['Flexão de braço 3 × 8 a 12','Abdominal supra 3 × 15','Abdominal remador 2 × 10','Prancha 3 × 25 s'],
+ 3:['Flexão de braço 4 séries do máximo (com boa postura)','Abdominal supra 4 × 20','Abdominal remador 3 × 10','Prancha 3 × 30 s'],
+ 4:['Flexão de braço 4 séries do máximo','Abdominal supra 4 × 20','Abdominal remador 3 × 12','Prancha 3 × 30 s'],
+ 5:['Flexão de braço 5 séries do máximo','Abdominal supra 4 × 25','Abdominal remador 3 × 15','Prancha 3 × 40 s'],
+ 7:['Flexão de braço 5 séries do máximo','Abdominal supra 5 × 25','Abdominal remador 4 × 15','Prancha 3 × 45 s'],
+};
+const NIVEL = [1,2,3,4,5,5,7,7];
+const TIRO = 'tiros de 400 m forte (2 min caminhando entre eles)';
+const CORRIDA = [
+ ['8 × (1 min de trote + 2 min de caminhada)','8 × (1 min de trote + 2 min de caminhada)','8 × (1 min de trote + 2 min de caminhada)'],
+ ['6 × (2 min de trote + 1 min de caminhada)','6 × (2 min de trote + 1 min de caminhada)','6 × (2 min de trote + 1 min de caminhada)'],
+ ['4 × (4 min de trote + 1 min de caminhada)','4 × (4 min de trote + 1 min de caminhada)','4 × (5 min de trote + 1 min de caminhada)'],
+ ['Trote contínuo de 15 min','Trote contínuo de 18 min','TESTE: 2,4 km cronometrados (pode intercalar com caminhada)'],
+ ['Corrida contínua de 20 min','6 '+TIRO,'Corrida contínua de 25 min'],
+ ['Corrida contínua de 25 min','6 '+TIRO,'3 km contínuos, sem olhar o tempo'],
+ ['Corrida contínua de 30 min','8 '+TIRO,'2 × 1,2 km no ritmo da prova (cerca de 6 min cada), com 3 min caminhando entre eles'],
+ ['Corrida contínua leve de 20 min','4 '+TIRO,'TESTE: 2,4 km cronometrados. Meta: abaixo de 12 min'],
+];
+const TRAIN = [];
+for(let w=0;w<8;w++){
+  const f = FORCA[NIVEL[w]];
+  for(let d=0; d<6; d++){
+    if(d%2===0){ // seg, qua, sex = força
+      let itens = f.slice();
+      if(w===0 && d===4) itens.push('Abdominal remador 2 × 10');
+      const teste = (d===4 && (w===3||w===7)) ? 'forca' : null;
+      TRAIN.push({tipo:'forca', semana:w+1, itens, teste, min:20});
+    } else {
+      const txt = CORRIDA[w][(d-1)/2];
+      const teste = txt.startsWith('TESTE') ? 'corrida' : null;
+      TRAIN.push({tipo:'corrida', semana:w+1, itens:[txt], teste, min:teste?25:35});
+    }
+  }
+}
+
+const COMO = {
+ aquecimento:['Aquecimento e volta à calma','Antes de todo treino: 5 min de caminhada rápida ou polichinelo. No fim: 5 min de caminhada leve e alongamento de pernas, braços e costas.'],
+ trote:['Trote','Corrida leve, num ritmo em que você ainda consegue falar frases curtas. Se não consegue falar, diminua.'],
+ tiro:['Tiro de 400 m','Correr 400 m forte, perto do ritmo da prova (cerca de 2 min para os 400 m). Depois, 2 min caminhando para descansar. Use um app de corrida para medir a distância, ou uma pista oficial, onde uma volta tem 400 m.'],
+ ritmo:['Ritmo de prova','Para fazer 2,4 km em 12 min, o ritmo é de 5 min por km (1,2 km em 6 min; 400 m em 2 min).'],
+ flexao:['Flexão de braço','Mãos no chão um pouco mais abertas que os ombros, corpo reto da cabeça ao calcanhar. Desça até o peito ficar a uns 10 cm do chão e suba esticando os braços. Se ainda não conseguir assim, apoie os joelhos no chão até ganhar força.'],
+ supra:['Abdominal supra','Deitado de costas, joelhos dobrados e pés no chão. Suba o tronco até tirar os ombros do chão e volte devagar. Não puxe o pescoço com as mãos.'],
+ remador:['Abdominal remador','Deitado, pernas esticadas e braços esticados para trás da cabeça. Suba o tronco e dobre as pernas ao mesmo tempo, levando os braços à frente dos joelhos, e volte. É o tipo cobrado em alguns OGMOs.'],
+ prancha:['Prancha','Apoiado nos antebraços e na ponta dos pés, corpo reto, barriga contraída. Fique parado pelo tempo indicado, respirando normalmente.'],
+ series:['Séries e repetições','"3 × 10" quer dizer 3 séries de 10 repetições, com 1 min de descanso entre as séries. "Do máximo" = quantas conseguir com boa postura.'],
+};
+function chaveComo(txt){
+  const t = txt.toLowerCase();
+  if(t.includes('flexão')) return 'flexao';
+  if(t.includes('supra')) return 'supra';
+  if(t.includes('remador')) return 'remador';
+  if(t.includes('prancha')) return 'prancha';
+  if(t.includes('tiro')) return 'tiro';
+  if(t.includes('ritmo da prova')||t.includes('teste')) return 'ritmo';
+  if(t.includes('trote')||t.includes('corrida')||t.includes('km')) return 'trote';
+  return null;
+}
+
+const MATERIAS = ['Português','Matemática','Inglês','Informática','Legislação'];
+const CORES = {'Português':'#1f6fb2','Matemática':'#f28c28','Inglês':'#7b4fc9','Informática':'#2e9e5b','Legislação':'#0f2e4a','Simulado':'#c0392b','Revisão':'#5d6b7a'};
+
+const LINKS = [
+ ['IDCAP (banca): editais, provas anteriores e gabaritos','https://www.idcap.org.br'],
+ ['Processo OGMO-ES 2022 no IDCAP','https://www.idcap.org.br/informacoes/62/'],
+ ['Resumo e edital OGMO-ES 2022','https://jcconcursos.com.br/concurso/concurso-ogmo-es-77263'],
+ ['Lei 12.815/2013 (Lei dos Portos)','https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2013/lei/l12815.htm'],
+ ['Lei 9.719/1998 (trabalho portuário avulso)','https://www.planalto.gov.br/ccivil_03/leis/l9719.htm'],
+ ['NR-29 atualizada','https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/sst-portarias/2022/portaria-no-671-de-30-de-marco-de-2022-nova-nr-29.pdf'],
+ ['Matemática grátis (Khan Academy)','https://pt.khanacademy.org'],
+ ['Questões por banca (filtre IDCAP)','https://www.qconcursos.com'],
+];
+
+/* ================== DATAS ================== */
+const DIAS = ['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+const DIAS3 = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+function pad(n){return String(n).padStart(2,'0')}
+function iso(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function parse(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)}
+function addDias(d,n){const x=new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);return x}
+function br(s){const d=parse(s);return pad(d.getDate())+'/'+pad(d.getMonth()+1)}
+function agora(){
+  const q = new URLSearchParams(location.search).get('hoje');
+  if(q){const d=parse(q);const n=new Date();d.setHours(n.getHours(),n.getMinutes());return d;}
+  return new Date();
+}
+function hojeISO(){return iso(agora())}
+
+/* ================== ESTADO ================== */
+const CHAVE='planoOgmo.v1';
+let S = carregar();
+function novo(){return {nome:'',inicio:null,manha:'07:00',tarde:'18:00',estudo:{},treino:{},testes:{},erros:[],pausas:[]}}
+function carregar(){
+  try{const s=JSON.parse(localStorage.getItem(CHAVE));if(s&&typeof s==='object')return Object.assign(novo(),s);}catch(e){}
+  return novo();
+}
+function salvar(){try{localStorage.setItem(CHAVE,JSON.stringify(S))}catch(e){} agendarDepois();}
+
+function pausado(dISO){return S.pausas.includes(dISO)}
+function diaUtil(d){const w=d.getDay();return w>=1&&w<=5}
+function estudoFeitos(){return Object.values(S.estudo).filter(x=>x&&x.feito).length}
+function estudoFeitoEm(dISO){for(const k in S.estudo){if(S.estudo[k]&&S.estudo[k].feito===dISO)return +k}return null}
+function estudoAtual(){for(let i=0;i<STUDY.length;i++){if(!(S.estudo[i]&&S.estudo[i].feito))return i}return -1}
+function treinoFeitoEm(dISO){for(const k in S.treino){if(S.treino[k]===dISO)return +k}return null}
+function treinoAtual(){for(let i=0;i<TRAIN.length;i++){if(!S.treino[i])return i}return -1}
+function partes(i){return STUDY[i].sim?['p']:['rev','p','s']}
+
+// quantos dias de estudo já "deveriam" ter sido feitos até a data (inclusive)
+function esperadoAte(dISO){
+  if(!S.inicio||dISO<S.inicio) return 0;
+  let n=0, d=parse(S.inicio); const fim=parse(dISO);
+  while(d<=fim && n<STUDY.length){ if(diaUtil(d)&&!pausado(iso(d))) n++; d=addDias(d,1); }
+  return n;
+}
+function atraso(){
+  const h=hojeISO(), d=parse(h);
+  let esp = esperadoAte(h);
+  if(diaUtil(d) && !pausado(h) && estudoFeitoEm(h)===null && esp>0) esp--; // hoje ainda está em andamento
+  return Math.max(0, esp - estudoFeitos());
+}
+function modoEstudo(){
+  const h=hojeISO(), d=parse(h), w=d.getDay();
+  const feitoHoje = estudoFeitoEm(h);
+  if(feitoHoje!==null) return {modo:'feito', i:feitoHoje};
+  if(!S.inicio) return {modo:'nada'};
+  if(h<S.inicio) return {modo:'antes', i:0};
+  const at = estudoAtual();
+  if(at<0) return {modo:'fim'};
+  if(pausado(h)) return {modo:'pausa'};
+  if(w>=1&&w<=5) return {modo:'estudo', i:at};
+  if(w===0) return atraso()>0 ? {modo:'recuperar', i:at} : {modo:'folga'};
+  return {modo:'sabado', i:at};
+}
+function modoTreino(){
+  const h=hojeISO(), w=parse(h).getDay();
+  const feitoHoje=treinoFeitoEm(h);
+  if(feitoHoje!==null) return {modo:'feito', i:feitoHoje};
+  if(!S.inicio) return {modo:'nada'};
+  if(h<S.inicio) return {modo:'antes', i:0};
+  const at=treinoAtual();
+  if(at<0) return {modo:'fim'};
+  if(pausado(h)) return {modo:'pausa'};
+  if(w===0) return {modo:'descanso'};
+  return {modo:'treino', i:at};
+}
+function previsaoFim(){
+  const rest = STUDY.length - estudoFeitos();
+  if(rest<=0) return null;
+  const h=hojeISO(); let d=parse(h), n=0;
+  if(S.inicio && h<S.inicio) d=parse(S.inicio);
+  for(let k=0;k<800;k++){
+    const di=iso(d);
+    const conta = diaUtil(d) && !pausado(di) && !(di===h && estudoFeitoEm(h)!==null);
+    if(conta){ n++; if(n>=rest) return di; }
+    d=addDias(d,1);
+  }
+  return null;
+}
+function sequencia(){
+  if(!S.inicio) return 0;
+  const datasE=new Set(Object.values(S.estudo).filter(x=>x&&x.feito).map(x=>x.feito));
+  const datasT=new Set(Object.values(S.treino));
+  const fimE=estudoAtual()<0, fimT=treinoAtual()<0;
+  const h=hojeISO(); let d=parse(h), n=0;
+  for(let k=0;k<500;k++){
+    const di=iso(d);
+    if(di<S.inicio) break;
+    const w=d.getDay();
+    if(w!==0 && !pausado(di)){
+      const okT = datasT.has(di)||fimT;
+      const okE = w===6 ? true : (datasE.has(di)||fimE);
+      if(okT&&okE) n++;
+      else if(di!==h) break;
+    }
+    d=addDias(d,-1);
+  }
+  return n;
+}
+
+/* ================== PROGRESSO ================== */
+function progressoMaterias(){
+  const tot={}, fei={};
+  STUDY.forEach((x,i)=>{
+    const st=S.estudo[i]||{};
+    const add=(m,min,ok)=>{const k=(m==='Simulado'||m==='Revisão')?'Simulados e revisão':m;tot[k]=(tot[k]||0)+min;if(ok)fei[k]=(fei[k]||0)+min;};
+    if(x.sim){add(x.p[0],120,st.p);} else {add(x.p[0],60,st.p);add(x.s[0],40,st.s);}
+  });
+  return [...MATERIAS,'Simulados e revisão'].map(m=>({m,pct:tot[m]?Math.round(100*(fei[m]||0)/tot[m]):0,h:Math.round((fei[m]||0)/6)/10,th:Math.round(tot[m]/6)/10}));
+}
+function pctGeral(){
+  let tot=0, ok=0;
+  STUDY.forEach((x,i)=>{const st=S.estudo[i]||{};partes(i).forEach(p=>{tot++;if(st[p])ok++;});});
+  const e = ok/tot, t = Object.keys(S.treino).length/TRAIN.length;
+  return {geral:Math.round(100*(e*0.6+t*0.4)), estudo:Math.round(100*e), treino:Math.round(100*t)};
+}
+
+/* ================== UI HELPERS ================== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(()=>e.classList.remove('on'),2200)}
+function abrirModal(html){$('#folha').innerHTML=html;$('#modal').classList.add('on')}
+function fecharModal(){$('#modal').classList.remove('on')}
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')fecharModal()});
+function como(k){const c=COMO[k];if(!c)return;abrirModal(`<h3>${esc(c[0])}</h3><p>${esc(c[1])}</p><button class="btn cheio grande" onclick="fecharModal()">Entendi</button>`)}
+function semanaDe(i){return Math.floor(i/5)+1}
+function yt(t){return 'https://www.youtube.com/results?search_query='+encodeURIComponent(t+' para concurso')}
+function qc(){return 'https://www.qconcursos.com/questoes-de-concursos/questoes'}
+
+/* ================== TELA HOJE ================== */
+function errosParaHoje(){
+  const h=parse(hojeISO());
+  const alvo=new Set([iso(addDias(h,-1)),iso(addDias(h,-7)),iso(addDias(h,-30))]);
+  return S.erros.filter(e=>alvo.has(e.data));
+}
+function blocoEstudo(i, travado){
+  const x=STUDY[i], st=S.estudo[i]||{};
+  const linha=(parte,tag,min,tit,desc,extra)=>{
+    const on=!!st[parte];
+    return `<div class="item ${on?'feito':''}">
+      <button class="chk ${on?'on':''}" ${travado?'disabled':''} onclick="marcarEstudo(${i},'${parte}')" aria-label="marcar">${CHECK}</button>
+      <div class="corpo"><div class="tit"><span class="tag" style="background:${(CORES[tag]||'#1f6fb2')}1a;color:${CORES[tag]||'#1f6fb2'}">${esc(tag)}</span><span class="tag min">${min} min</span></div>
+      <div class="tit" style="margin-top:5px">${esc(tit)}</div>${desc?`<div class="desc">${desc}</div>`:''}${extra||''}</div></div>`;
+  };
+  let h='';
+  if(x.sim){
+    h+=linha('p','Simulado',120,x.p[1],'Faça como se fosse a prova: sem consulta e cronometrado. Pegue a prova e o gabarito em "Mais → Links".','');
+  } else {
+    const due=errosParaHoje().length;
+    h+=linha('rev','Revisão',15,'Caderno de erros + resumos de ontem e da semana passada', due?`<a href="#" onclick="irPara('cad');return false">${due} erro(s) do caderno para revisar hoje</a>`:'Releia os resumos e as regras do caderno de erros.','');
+    const dp = x.q ? 'Só questões e revisão, sem aula nova. Cada erro vai para o caderno.' : '35 min de aula + resumo · 25 min de questões';
+    const ds = x.q ? 'Só questões e revisão. Cada erro vai para o caderno.' : '25 min de aula + resumo · 15 min de questões';
+    const bt=(t)=> x.q ? `<div class="acoes"><a class="btn" href="${qc()}" target="_blank">✎ Questões</a></div>` : `<div class="acoes"><a class="btn" href="${yt(t)}" target="_blank">▶ Aula no YouTube</a><a class="btn" href="${qc()}" target="_blank">✎ Questões</a></div>`;
+    h+=linha('p',x.p[0],60,x.p[1],dp,bt(x.p[1]));
+    h+=`<div class="peq" style="padding:2px 0 8px 46px">☕ Pausa de 5 min</div>`;
+    h+=linha('s',x.s[0],40,x.s[1],ds,bt(x.s[1]));
+  }
+  return h;
+}
+function blocoTreino(i, travado){
+  const t=TRAIN[i], feito=!!S.treino[i];
+  let h=`<div class="ex"><span>Aquecimento 5 min + volta à calma 5 min</span><button class="btn q" onclick="como('aquecimento')">Como fazer</button></div>`;
+  t.itens.forEach(it=>{const k=chaveComo(it);h+=`<div class="ex"><span>${esc(it)}</span>${k?`<button class="btn q" onclick="como('${k}')">Como fazer</button>`:''}</div>`});
+  if(t.tipo==='forca') h+=`<div class="ex"><span class="peq">1 min de descanso entre as séries</span><button class="btn q" onclick="como('series')">?</button></div>`;
+  if(t.teste){
+    const r=S.testes[i]||{};
+    if(t.teste==='forca'){
+      h+=`<div class="teste"><b>🏁 Teste de hoje: máximo em 1 minuto</b><div class="linha2">
+      <div><label class="campo">Flexões</label><input class="inp" type="number" inputmode="numeric" value="${r.flex??''}" onchange="salvarTeste(${i},'flex',this.value)"></div>
+      <div><label class="campo">Abdominais</label><input class="inp" type="number" inputmode="numeric" value="${r.abd??''}" onchange="salvarTeste(${i},'abd',this.value)"></div></div></div>`;
+    } else {
+      h+=`<div class="teste"><b>🏁 Teste de hoje: 2,4 km</b><label class="campo">Seu tempo (minutos:segundos)</label>
+      <input class="inp" placeholder="ex.: 13:40" value="${esc(r.tempo??'')}" onchange="salvarTeste(${i},'tempo',this.value)"><div class="peq" style="margin-top:6px">Meta da prova: 12:00 ou menos.</div></div>`;
+    }
+  }
+  h+=`<div style="margin-top:12px"><button class="btn grande ${feito?'verde':'cheio'}" ${travado?'disabled':''} onclick="marcarTreino(${i})">${feito?'✓ Treino feito':'Marcar treino como feito'}</button></div>`;
+  return h;
+}
+function resumoEstudo(i){const x=STUDY[i];return x.sim?x.p[1]:`${x.p[0]}: ${x.p[1]} + ${x.s[0]}: ${x.s[1]}`}
+function resumoTreino(i){const t=TRAIN[i];return (t.tipo==='forca'?'Força (20 min)':'Corrida ('+t.min+' min)')+(t.teste?' + teste':'')}
+
+function telaHoje(){
+  const me=modoEstudo(), mt=modoTreino();
+  const h=hojeISO(), d=parse(h);
+  let html='';
+  if(!S.inicio){$('#t-hoje').innerHTML='';return;}
+  const at=atraso();
+  if(at>0 && me.modo!=='fim'){
+    const pf=previsaoFim();
+    html+=`<div class="aviso"><b>${at} dia(s) de estudo pendente(s).</b> ${d.getDay()===0?'Hoje é domingo: dá para recuperar um agora.':'Recupere no domingo ou siga a fila normalmente.'}${pf?` Previsão de término: <b>${br(pf)}</b>.`:''}</div>`;
+  }
+  // ESTUDO
+  html+=`<div class="card"><h2>📚 Estudo</h2>`;
+  if(me.modo==='estudo'||me.modo==='recuperar'||me.modo==='feito'){
+    const i=me.i;
+    html+=`<div class="meta">Dia ${i+1} de ${STUDY.length} · Semana ${semanaDe(i)}${me.modo==='recuperar'?' · <b style="color:var(--laranja)">Recuperação de domingo</b>':''}${me.modo==='feito'?' · <b style="color:var(--verde)">Concluído hoje ✓</b>':''}</div>`;
+    html+=blocoEstudo(i,false);
+  } else if(me.modo==='antes'){
+    html+=`<div class="vazio"><div class="grande">🗓️</div>Seu plano começa em <b>${br(S.inicio)}</b> (${DIAS[parse(S.inicio).getDay()]}).<br><br><span class="amanha">Dia 1: <b>${esc(resumoEstudo(0))}</b></span></div>`;
+  } else if(me.modo==='sabado'){
+    html+=`<div class="vazio"><div class="grande">🏃</div>Sábado não tem estudo, só treino.${at>0?'<br>Amanhã, domingo, dá para recuperar o que ficou pendente.':''}</div>`;
+  } else if(me.modo==='folga'){
+    html+=`<div class="vazio"><div class="grande">😌</div>Domingo de folga: não ficou nada pendente na semana.</div>`;
+  } else if(me.modo==='pausa'){
+    html+=`<div class="vazio"><div class="grande">⏸️</div>Você está em pausa hoje. A fila continua de onde parou quando a pausa acabar.</div>`;
+  } else if(me.modo==='fim'){
+    html+=`<div class="vazio"><div class="grande">🏆</div><b>Você terminou os 40 dias de estudo!</b><br><br><div style="text-align:left" class="amanha">Agora é o <b>modo manutenção</b> até a prova:<br>• 15 min de caderno de erros + 60 min de questões da matéria principal + 40 min da secundária, seguindo a mesma divisão da semana.<br>• A cada 2 semanas, um simulado de 50 questões.<br>• Toda semana, olhe se saiu edital no site do IDCAP.</div></div>`;
+  }
+  html+=`</div>`;
+  // TREINO
+  html+=`<div class="card"><h2>🏃 Treino</h2>`;
+  if(mt.modo==='treino'||mt.modo==='feito'){
+    const t=TRAIN[mt.i];
+    html+=`<div class="meta">${t.tipo==='forca'?'Força':'Corrida'} · cerca de ${t.min} min · treino ${mt.i+1} de ${TRAIN.length} (semana ${t.semana})</div>`;
+    html+=blocoTreino(mt.i,false);
+  } else if(mt.modo==='descanso'){
+    html+=`<div class="vazio"><div class="grande">🛌</div>Domingo é descanso. O corpo também treina descansando.</div>`;
+  } else if(mt.modo==='antes'){
+    html+=`<div class="vazio">Primeiro treino em ${br(S.inicio)}: <b>${esc(resumoTreino(0))}</b></div>`;
+  } else if(mt.modo==='pausa'){
+    html+=`<div class="vazio"><div class="grande">⏸️</div>Pausa hoje.</div>`;
+  } else if(mt.modo==='fim'){
+    html+=`<div class="vazio"><div class="grande">💪</div><b>Você completou os 48 treinos!</b><div class="amanha" style="margin-top:8px">Continue com 3 corridas e 3 treinos de força por semana até a prova. Se ainda não fez os 2,4 km abaixo de 12 min, repita os treinos das semanas 5 a 8.</div></div>`;
+  }
+  html+=`</div>`;
+  // AMANHÃ
+  const am=previaAmanha();
+  if(am) html+=`<div class="card"><h2>➡️ Próximo dia</h2><div class="amanha">${am}</div></div>`;
+  $('#t-hoje').innerHTML=html;
+}
+function previaAmanha(){
+  let ie=estudoAtual(), it=treinoAtual();
+  const me=modoEstudo(), mt=modoTreino();
+  if(ie>=0 && (me.modo==='estudo'||me.modo==='recuperar')) ie = ie+1<STUDY.length ? ie+1 : -1;
+  if(it>=0 && mt.modo==='treino') it = it+1<TRAIN.length ? it+1 : -1;
+  const h=hojeISO(); const am=addDias(parse(h),1); const w=am.getDay();
+  if(S.inicio && h<S.inicio) return '';
+  const partesTxt=[];
+  if(ie>=0 && (w>=1&&w<=5)) partesTxt.push(`<b>Estudo · Dia ${ie+1}:</b> ${esc(resumoEstudo(ie))}`);
+  else if(w===6) partesTxt.push('Sábado: sem estudo.');
+  else if(w===0) partesTxt.push(atraso()>0||modoEstudo().modo==='estudo'?'Domingo: recuperação, se ficar algo pendente.':'Domingo: folga.');
+  if(it>=0 && w!==0) partesTxt.push(`<b>Treino:</b> ${esc(resumoTreino(it))}`);
+  if(!partesTxt.length) return '';
+  return `${DIAS[w][0].toUpperCase()+DIAS[w].slice(1)} (${br(iso(am))})<br>`+partesTxt.join('<br>');
+}
+
+function marcarEstudo(i,parte){
+  const h=hojeISO();
+  const me=modoEstudo();
+  if(!(me.i===i && (me.modo==='estudo'||me.modo==='recuperar'||me.modo==='feito'))) return;
+  const st=S.estudo[i]||(S.estudo[i]={});
+  st[parte]=!st[parte];
+  const completo=partes(i).every(p=>st[p]);
+  if(completo && !st.feito){st.feito=h; toast(`Dia ${i+1} concluído! 🎉`);}
+  if(!completo && st.feito===h) st.feito=null;
+  salvar(); render();
+}
+function marcarTreino(i){
+  const h=hojeISO(), mt=modoTreino();
+  if(!(mt.i===i && (mt.modo==='treino'||mt.modo==='feito'))) return;
+  if(S.treino[i]) delete S.treino[i]; else {S.treino[i]=h; toast('Treino feito! 💪');}
+  salvar(); render();
+}
+function salvarTeste(i,campo,v){
+  const r=S.testes[i]||(S.testes[i]={});
+  r[campo]= campo==='tempo' ? v.trim() : (v===''?null:Number(v));
+  r.data=hojeISO(); salvar(); toast('Resultado salvo');
+}
+
+/* ================== PROGRESSO DO DIA (topo) ================== */
+function progressoDia(){
+  const me=modoEstudo(), mt=modoTreino();
+  let tot=0, ok=0;
+  if(['estudo','recuperar','feito'].includes(me.modo)){const st=S.estudo[me.i]||{};partes(me.i).forEach(p=>{tot++;if(st[p])ok++;});}
+  if(['treino','feito'].includes(mt.modo)){tot++;if(S.treino[mt.i])ok++;}
+  return tot?Math.round(100*ok/tot):100;
+}
+
+/* ================== TELA PROGRESSO ================== */
+function anel(p){
+  const r=46,c=2*Math.PI*r;
+  return `<svg viewBox="0 0 110 110" width="110" height="110"><circle cx="55" cy="55" r="${r}" fill="none" stroke="#eef0f3" stroke-width="12"/><circle cx="55" cy="55" r="${r}" fill="none" stroke="var(--laranja)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-p/100)}" transform="rotate(-90 55 55)"/><text x="55" y="62" text-anchor="middle" font-size="24" font-weight="800" fill="var(--txt)">${p}%</text></svg>`;
+}
+function tempoSeg(t){if(!t)return null;const m=String(t).match(/^(\d{1,2})[:.,h ]?(\d{2})?$/);if(!m)return null;return (+m[1])*60+(+(m[2]||0))}
+function telaProg(){
+  const g=pctGeral(), pf=previsaoFim(), seq=sequencia();
+  let h=`<div class="card"><h2>Plano completo</h2><div class="anel">${anel(g.geral)}<div class="amanha">Estudo: <b>${estudoFeitos()} de ${STUDY.length}</b> dias<br>Treino: <b>${Object.keys(S.treino).length} de ${TRAIN.length}</b> treinos<br>${pf?`Previsão de término: <b>${br(pf)}</b>`:'Estudo concluído ✓'}</div></div>
+  <div class="stats" style="margin-top:12px"><div class="stat"><b>🔥 ${seq}</b><span>dias seguidos cumprindo tudo</span></div><div class="stat"><b>${atraso()}</b><span>dias de estudo pendentes</span></div></div></div>`;
+  h+=`<div class="card"><h2>Por matéria</h2><div class="meta">Horas estudadas de cada matéria</div>`;
+  progressoMaterias().forEach(x=>{const cor=CORES[x.m]||'#5d6b7a';h+=`<div class="mat"><div class="l"><span>${x.m}</span><span>${x.pct}% · ${String(x.h).replace('.',',')} de ${String(x.th).replace('.',',')} h</span></div><div class="b"><i style="width:${x.pct}%;background:${cor}"></i></div></div>`});
+  h+=`</div>`;
+  // testes
+  const tf=[], tc=[];
+  TRAIN.forEach((t,i)=>{if(t.teste==='forca')tf.push(i);if(t.teste==='corrida')tc.push(i)});
+  h+=`<div class="card"><h2>Testes físicos</h2><table class="t"><tr><th>Teste</th><th>Semana 4</th><th>Semana 8</th></tr>`;
+  const v=(i,c)=>{const r=S.testes[i];return r&&r[c]!=null&&r[c]!==''?esc(r[c]):'—'};
+  h+=`<tr><td>Flexões em 1 min</td><td>${v(tf[0],'flex')}</td><td>${v(tf[1],'flex')}</td></tr>`;
+  h+=`<tr><td>Abdominais em 1 min</td><td>${v(tf[0],'abd')}</td><td>${v(tf[1],'abd')}</td></tr>`;
+  h+=`<tr><td>2,4 km</td><td>${v(tc[0],'tempo')}</td><td>${v(tc[1],'tempo')}</td></tr></table>`;
+  const ult=[tc[1],tc[0]].map(i=>tempoSeg(S.testes[i]&&S.testes[i].tempo)).find(x=>x!=null);
+  if(ult!=null){const dif=ult-720;h+=`<div class="${dif<=0?'ok':'aviso'}" style="margin:12px 0 0">${dif<=0?'Você já está dentro da meta de 12 min! 🎯':`Faltam <b>${Math.floor(dif/60)} min ${pad(dif%60)} s</b> para chegar aos 12 min.`}</div>`;}
+  h+=`</div>`;
+  // mapa
+  const atE=estudoAtual(), atT=treinoAtual();
+  h+=`<div class="card"><h2>Mapa do plano</h2><div class="meta">Verde = feito · Azul = próximo</div><div class="mapa">`;
+  for(let w=0;w<8;w++){
+    h+=`<div class="sem">Semana ${w+1}</div>`;
+    for(let d=0;d<6;d++){
+      const ti=w*6+d; const ei=w*5+d;
+      const fe = d<5 ? (S.estudo[ei]&&S.estudo[ei].feito) : null;
+      const ft = S.treino[ti];
+      let cls='cel', txt=DIAS3[d+1];
+      if(d<5){ if(fe&&ft) cls+=' f'; else if(ei===atE||ti===atT) cls+=' a'; }
+      else { if(ft) cls+=' f'; else if(ti===atT) cls+=' a'; }
+      h+=`<div class="${cls}">${txt}</div>`;
+    }
+  }
+  h+=`</div><div class="peq" style="margin-top:8px">Cada quadrado é um dia do plano (estudo + treino), não uma data do calendário.</div></div>`;
+  $('#t-prog').innerHTML=h;
+}
+
+/* ================== CADERNO ================== */
+let filtroCad='Todas';
+function telaCad(){
+  let h=`<div class="card"><h2>Caderno de erros</h2><div class="meta">Anote primeiro no papel; aqui fica a regra para revisar em qualquer lugar.</div><button class="btn laranja grande" onclick="novoErro()">+ Anotar um erro</button></div>`;
+  const due=errosParaHoje();
+  if(due.length){h+=`<div class="card"><h2>🔁 Revisar hoje</h2><div class="meta">Erros anotados ontem, há 1 semana e há 1 mês</div>${due.map(cartaoErro).join('')}</div>`;}
+  const lista=S.erros.filter(e=>filtroCad==='Todas'||e.materia===filtroCad).slice().reverse();
+  h+=`<div class="card"><div class="chips">${['Todas',...MATERIAS].map(m=>`<button class="chip ${m===filtroCad?'on':''}" onclick="filtroCad='${m}';telaCad()">${m}</button>`).join('')}</div>`;
+  h+= lista.length ? lista.map(cartaoErro).join('') : `<div class="vazio">Nenhum erro anotado${filtroCad!=='Todas'?' em '+filtroCad:''} ainda.</div>`;
+  h+=`</div>`;
+  $('#t-cad').innerHTML=h;
+}
+function cartaoErro(e){
+  return `<div class="erro"><span class="tag" style="background:${(CORES[e.materia]||'#1f6fb2')}1a;color:${CORES[e.materia]||'#1f6fb2'}">${esc(e.materia)}</span><div class="e" style="margin-top:6px">${esc(e.erro)}</div>${e.regra?`<div class="r">✓ ${esc(e.regra)}</div>`:''}<div class="rod"><span>${br(e.data)}</span><button class="btn perigo q" style="padding:4px 10px;font-size:12px" onclick="apagarErro('${e.id}')">Apagar</button></div></div>`;
+}
+function novoErro(){
+  const me=modoEstudo(); let sug='Português';
+  if(me.i!=null && STUDY[me.i] && MATERIAS.includes(STUDY[me.i].p[0])) sug=STUDY[me.i].p[0];
+  abrirModal(`<h3>Anotar erro</h3>
+  <label class="campo">Matéria</label><select class="inp" id="eM">${MATERIAS.map(m=>`<option ${m===sug?'selected':''}>${m}</option>`).join('')}</select>
+  <label class="campo">O que você errou</label><textarea class="inp" id="eE" placeholder="ex.: achei que 'à medida que' não tinha crase"></textarea>
+  <label class="campo">A regra certa (uma linha)</label><textarea class="inp" id="eR" placeholder="ex.: 'à medida que' sempre tem crase"></textarea>
+  <div style="margin-top:14px" class="linha2"><button class="btn cinza grande" onclick="fecharModal()">Cancelar</button><button class="btn cheio grande" onclick="salvarErro()">Salvar</button></div>`);
+}
+function salvarErro(){
+  const e=$('#eE').value.trim(), r=$('#eR').value.trim();
+  if(!e){toast('Escreva o que você errou');return;}
+  S.erros.push({id:Date.now().toString(36),data:hojeISO(),materia:$('#eM').value,erro:e,regra:r});
+  salvar(); fecharModal(); render(); toast('Erro anotado');
+}
+function apagarErro(id){
+  abrirModal(`<h3>Apagar este erro?</h3><div class="linha2" style="margin-top:14px"><button class="btn cinza grande" onclick="fecharModal()">Não</button><button class="btn perigo grande" onclick="S.erros=S.erros.filter(e=>e.id!=='${id}');salvar();fecharModal();render()">Apagar</button></div>`);
+}
+
+/* ================== MAIS ================== */
+function telaMais(){
+  const nat=nativo();
+  let h=`<div class="card"><h2>Ajustes</h2>
+  <button class="menu-item" onclick="editarAjustes()">Nome e horários dos avisos <span>${esc(S.manha)} e ${esc(S.tarde)} ›</span></button>
+  <button class="menu-item" onclick="editarPausa()">Pausar o plano <span>${pausasFuturas().length?pausasFuturas().length+' dia(s) marcados':'viagem, doença…'} ›</span></button>
+  <button class="menu-item" onclick="testarAviso()">Testar notificação <span>${nat?'chega em 5 s':'só no app instalado'} ›</span></button>
+  </div>`;
+  h+=`<div class="card"><h2>Como fazer os exercícios</h2>${Object.keys(COMO).map(k=>`<button class="menu-item" onclick="como('${k}')">${esc(COMO[k][0])} <span>›</span></button>`).join('')}</div>`;
+  h+=`<div class="card"><h2>Links</h2>${LINKS.map(l=>`<a class="menu-item" style="text-decoration:none;color:inherit" href="${l[1]}" target="_blank">${esc(l[0])} <span>↗</span></a>`).join('')}<div class="peq" style="margin-top:8px">Para os simulados, use provas de outros OGMOs no site do IDCAP (Santos, Rio de Janeiro, Angra dos Reis, Santarém): mesma banca e mesmo tipo de cargo.</div></div>`;
+  h+=`<div class="card"><h2>Como o plano funciona</h2><div class="amanha">
+  • <b>A fila:</b> são 40 dias de estudo e 48 treinos em ordem. Cada dia você faz o próximo. Se faltar, amanhã aparece o mesmo, e nunca dois de uma vez.<br>
+  • <b>Domingo:</b> se ficou estudo pendente na semana, recupere um no domingo. Domingo nunca tem treino.<br>
+  • <b>Estudo e treino andam separados.</b><br>
+  • <b>Base:</b> prova do OGMO-ES de 2022 (banca IDCAP): Português 15, Matemática 15, Inglês 10 e Informática 10 questões, mais Legislação Portuária, que outros OGMOs cobram. Quando sair edital novo, confira se o conteúdo mudou.<br>
+  • <b>Saúde:</b> faça um check-up antes de começar os treinos. Se sentir dor no peito, tontura ou falta de ar fora do normal, pare e procure um médico.</div></div>`;
+  h+=`<div class="card"><h2>Seus dados</h2><div class="peq">Tudo fica guardado só neste celular. Faça um backup de vez em quando.</div>
+  <button class="menu-item" onclick="exportar()">Fazer backup <span>›</span></button>
+  <button class="menu-item" onclick="importar()">Restaurar backup <span>›</span></button>
+  <button class="menu-item" style="color:#c0392b" onclick="zerar()">Apagar tudo e recomeçar <span>›</span></button></div>
+  <div class="peq" style="text-align:center;margin:6px 0 16px">Plano OGMO · versão 1.0</div>`;
+  $('#t-mais').innerHTML=h;
+}
+function pausasFuturas(){const h=hojeISO();return S.pausas.filter(p=>p>=h).sort()}
+function editarAjustes(){
+  abrirModal(`<h3>Ajustes</h3>
+  <label class="campo">Seu nome</label><input class="inp" id="aN" value="${esc(S.nome)}">
+  <div class="linha2"><div><label class="campo">Aviso da manhã</label><input class="inp" type="time" id="aM" value="${esc(S.manha)}"></div>
+  <div><label class="campo">Aviso do fim do dia</label><input class="inp" type="time" id="aT" value="${esc(S.tarde)}"></div></div>
+  <div class="peq" style="margin-top:6px">O aviso do fim do dia só chega se ainda faltar algo do dia.</div>
+  <label class="campo">Data de início do plano</label><input class="inp" type="date" id="aI" value="${esc(S.inicio||'')}">
+  <div class="peq" style="margin-top:6px">Mudar a data de início muda a conta de dias pendentes. O que você já fez continua marcado.</div>
+  <div class="linha2" style="margin-top:14px"><button class="btn cinza grande" onclick="fecharModal()">Cancelar</button><button class="btn cheio grande" onclick="salvarAjustes()">Salvar</button></div>`);
+}
+function salvarAjustes(){
+  S.nome=$('#aN').value.trim(); S.manha=$('#aM').value||'07:00'; S.tarde=$('#aT').value||'18:00';
+  if($('#aI').value) S.inicio=$('#aI').value;
+  salvar(); fecharModal(); render(); toast('Ajustes salvos');
+}
+function editarPausa(){
+  const pf=pausasFuturas();
+  abrirModal(`<h3>Pausar o plano</h3><p class="peq">Durante a pausa não há estudo, treino nem avisos, e os dias não contam como pendentes. A fila continua de onde parou.</p>
+  <label class="campo">A partir de</label><input class="inp" type="date" id="pD" value="${hojeISO()}">
+  <label class="campo">Quantos dias</label><input class="inp" type="number" inputmode="numeric" id="pN" value="3" min="1" max="60">
+  <button class="btn laranja grande" style="margin-top:14px" onclick="salvarPausa()">Pausar</button>
+  ${pf.length?`<div class="peq" style="margin-top:14px">Pausas marcadas: ${pf.map(br).join(', ')}</div><button class="btn perigo grande" style="margin-top:8px" onclick="S.pausas=S.pausas.filter(p=>p<hojeISO());salvar();fecharModal();render();toast('Pausas canceladas')">Cancelar pausas futuras</button>`:''}
+  <button class="btn cinza grande" style="margin-top:8px" onclick="fecharModal()">Fechar</button>`);
+}
+function salvarPausa(){
+  const d0=$('#pD').value, n=Math.min(60,Math.max(1,parseInt($('#pN').value)||0));
+  if(!d0){toast('Escolha a data');return;}
+  for(let k=0;k<n;k++){const di=iso(addDias(parse(d0),k));if(!S.pausas.includes(di))S.pausas.push(di);}
+  salvar(); fecharModal(); render(); toast(`Pausa de ${n} dia(s) marcada`);
+}
+function exportar(){
+  const txt=btoa(unescape(encodeURIComponent(JSON.stringify(S))));
+  abrirModal(`<h3>Backup</h3><p class="peq">Copie o código abaixo e guarde (mande para você mesmo no WhatsApp ou e-mail). Para restaurar, use "Restaurar backup".</p>
+  <textarea class="inp" id="bk" readonly style="min-height:140px;font-size:12px">${txt}</textarea>
+  <button class="btn cheio grande" style="margin-top:10px" onclick="copiar()">Copiar código</button>
+  <button class="btn cinza grande" style="margin-top:8px" onclick="fecharModal()">Fechar</button>`);
+}
+async function copiar(){const t=$('#bk');try{await navigator.clipboard.writeText(t.value);toast('Copiado!')}catch(e){t.select();document.execCommand('copy');toast('Copiado!')}}
+function importar(){
+  abrirModal(`<h3>Restaurar backup</h3><p class="peq">Cole o código do backup. Isso substitui o que está no app agora.</p>
+  <textarea class="inp" id="rk" style="min-height:140px;font-size:12px"></textarea>
+  <button class="btn cheio grande" style="margin-top:10px" onclick="restaurar()">Restaurar</button>
+  <button class="btn cinza grande" style="margin-top:8px" onclick="fecharModal()">Cancelar</button>`);
+}
+function restaurar(){
+  try{const o=JSON.parse(decodeURIComponent(escape(atob($('#rk').value.trim()))));if(!o||typeof o!=='object'||!('estudo' in o))throw 0;S=Object.assign(novo(),o);salvar();fecharModal();render();toast('Backup restaurado')}
+  catch(e){toast('Código inválido')}
+}
+function zerar(){
+  abrirModal(`<h3>Apagar tudo?</h3><p>Todo o progresso, o caderno de erros e os testes serão apagados. Não dá para desfazer.</p><div class="linha2"><button class="btn cinza grande" onclick="fecharModal()">Cancelar</button><button class="btn perigo grande" onclick="S=novo();salvar();fecharModal();iniciar()">Apagar</button></div>`);
+}
+
+/* ================== NOTIFICAÇÕES ================== */
+function nativo(){return !!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()&&Capacitor.Plugins&&Capacitor.Plugins.LocalNotifications)}
+function LN(){return Capacitor.Plugins.LocalNotifications}
+async function pedirPermissao(){
+  if(!nativo())return false;
+  try{
+    let p=await LN().checkPermissions();
+    if(p.display!=='granted') p=await LN().requestPermissions();
+    try{await LN().createChannel({id:'plano',name:'Lembretes do plano',description:'Plano do dia e lembrete do fim do dia',importance:4,visibility:1,vibration:true});}catch(e){}
+    return p.display==='granted';
+  }catch(e){return false}
+}
+let _ag=null;
+function agendarDepois(){clearTimeout(_ag);_ag=setTimeout(agendar,600)}
+function curto(t,n){return t.length>n?t.slice(0,n-1)+'…':t}
+async function agendar(){
+  if(!nativo()||!S.inicio) return;
+  try{
+    const p=await LN().checkPermissions(); if(p.display!=='granted') return;
+    const pend=await LN().getPending();
+    if(pend.notifications&&pend.notifications.length) await LN().cancel({notifications:pend.notifications.map(n=>({id:n.id}))});
+    const lista=[]; const agoraD=agora(); const h=hojeISO();
+    let si=estudoAtual(), ti=treinoAtual(), pendDom=atraso();
+    const feitoE=estudoFeitoEm(h)!==null, feitoT=treinoFeitoEm(h)!==null;
+    for(let k=0;k<14;k++){
+      const d=addDias(parse(h),k), di=iso(d), w=d.getDay();
+      if(di<S.inicio || pausado(di)) continue;
+      let e=null, t=null;
+      if(k===0){
+        const me=modoEstudo(); if((me.modo==='estudo'||me.modo==='recuperar')&&!feitoE){e=me.i;si++;if(me.modo==='recuperar')pendDom--;}
+        const mt=modoTreino(); if(mt.modo==='treino'&&!feitoT){t=mt.i;ti++;}
+      } else {
+        if(si>=0&&si<STUDY.length){ if(w>=1&&w<=5){e=si;si++;} else if(w===0&&pendDom>0){e=si;si++;pendDom--;} }
+        if(ti>=0&&ti<TRAIN.length&&w!==0){t=ti;ti++;}
+      }
+      if(e===null&&t===null) continue;
+      const linhas=[];
+      if(e!==null){const x=STUDY[e];linhas.push(x.sim?`📚 Dia ${e+1}: ${x.p[1]}`:`📚 Dia ${e+1}${w===0?' (recuperação)':''}: ${x.p[0]} – ${curto(x.p[1],60)} + ${x.s[0]} – ${curto(x.s[1],50)}`);}
+      if(t!==null) linhas.push('🏃 Treino: '+resumoTreino(t));
+      const [mh,mm]=S.manha.split(':').map(Number), [th,tm]=S.tarde.split(':').map(Number);
+      const em=new Date(d.getFullYear(),d.getMonth(),d.getDate(),mh,mm), et=new Date(d.getFullYear(),d.getMonth(),d.getDate(),th,tm);
+      if(em>agoraD) lista.push({id:1000+k*2,title:`Bom dia${S.nome?', '+S.nome:''}! Seu plano de hoje`,body:linhas.join('\n'),largeBody:linhas.join('\n'),channelId:'plano',schedule:{at:em,allowWhileIdle:true}});
+      if(et>agoraD){
+        const falta=[]; if(e!==null)falta.push(`estudo (Dia ${e+1})`); if(t!==null)falta.push('treino');
+        lista.push({id:1001+k*2,title:'Ainda dá tempo!',body:'Ainda falta hoje: '+falta.join(' e ')+'.',channelId:'plano',schedule:{at:et,allowWhileIdle:true}});
+      }
+    }
+    if(lista.length) await LN().schedule({notifications:lista});
+  }catch(err){console.log('agendar',err)}
+}
+async function testarAviso(){
+  if(!nativo()){toast('A notificação só funciona no app instalado');return;}
+  const ok=await pedirPermissao(); if(!ok){toast('Permita as notificações nas configurações do celular');return;}
+  await LN().schedule({notifications:[{id:999,title:'Plano OGMO',body:'Teste: as notificações estão funcionando ✓',channelId:'plano',schedule:{at:new Date(Date.now()+5000),allowWhileIdle:true}}]});
+  toast('Aviso de teste em 5 segundos');
+}
+
+/* ================== INÍCIO ================== */
+function iniciar(){
+  if(S.inicio){$('#onb').classList.remove('on');render();agendar();return;}
+  const h=parse(hojeISO()); let ini=h; // começa hoje se for dia útil; senão, na próxima segunda
+  if(!diaUtil(ini)){while(ini.getDay()!==1)ini=addDias(ini,1);}
+  $('#onb').innerHTML=`<h1>Plano OGMO 💪</h1>
+  <p>8 semanas de estudo e treino para o processo seletivo de trabalhador portuário do OGMO.</p>
+  <ul><li>2 horas de estudo de segunda a sexta</li><li>Treino de segunda a sábado (força e corrida para o TAF)</li><li>Domingo para recuperar o que ficou pendente</li><li>Aviso toda manhã com o plano do dia</li></ul>
+  <label class="campo">Como você quer ser chamado?</label><input class="inp" id="oN" placeholder="Seu nome">
+  <label class="campo">Quando quer começar?</label><input class="inp" type="date" id="oI" value="${iso(ini)}">
+  <div class="linha2"><div><label class="campo">Aviso da manhã</label><input class="inp" type="time" id="oM" value="07:00"></div>
+  <div><label class="campo">Aviso do fim do dia</label><input class="inp" type="time" id="oT" value="18:00"></div></div>
+  <button class="btn laranja grande" style="margin-top:22px" onclick="comecar()">Começar</button>
+  <p class="peq" style="color:#cfe0f0;margin-top:14px">Antes de começar os treinos, faça um check-up médico.</p>`;
+  $('#onb').classList.add('on');
+}
+async function comecar(){
+  S.nome=$('#oN').value.trim(); S.inicio=$('#oI').value||hojeISO(); S.manha=$('#oM').value||'07:00'; S.tarde=$('#oT').value||'18:00';
+  salvar(); $('#onb').classList.remove('on'); render();
+  await pedirPermissao(); agendar();
+}
+let abaAtual='hoje';
+function irPara(t){
+  abaAtual=t;
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  document.querySelectorAll('.tela').forEach(s=>s.classList.toggle('on',s.id==='t-'+t));
+  render(); window.scrollTo(0,0);
+}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>irPara(b.dataset.t)));
+function render(){
+  const d=agora();
+  $('#ola').textContent='Olá'+(S.nome?', '+S.nome:'')+'!';
+  $('#dataHoje').textContent=DIAS[d.getDay()][0].toUpperCase()+DIAS[d.getDay()].slice(1)+', '+br(iso(d));
+  const p=progressoDia(); $('#barraDia').style.width=p+'%'; $('#pctDia').textContent=p+'%';
+  if(abaAtual==='hoje')telaHoje(); else if(abaAtual==='prog')telaProg(); else if(abaAtual==='cad')telaCad(); else telaMais();
+}
+let _ultDia=hojeISO();
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){render();agendar();_ultDia=hojeISO();}});
+setInterval(()=>{if(hojeISO()!==_ultDia){_ultDia=hojeISO();render();agendar();}},60000);
+iniciar();
+</script>
+</body>
+</html>
