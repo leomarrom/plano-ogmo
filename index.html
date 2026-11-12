@@ -77,6 +77,17 @@ nav button.on{color:var(--azul)}
 .cel.f{background:var(--verde);color:#fff}
 .cel.a{background:var(--azul);color:#fff}
 .cel.v{background:transparent}
+.qtexto{background:var(--bg);border-radius:12px;padding:12px;font-size:15px;line-height:1.55;max-height:38vh;overflow:auto;margin-bottom:12px}
+.qenun{font-weight:650;font-size:17px;line-height:1.4;margin:6px 0 12px}
+.qop{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;padding:12px;border:2px solid var(--linha);border-radius:12px;margin-bottom:8px;background:#fff;font-size:15px;line-height:1.35}
+.qop b{flex:0 0 22px;height:22px;border-radius:50%;background:#eef0f3;display:flex;align-items:center;justify-content:center;font-size:12px}
+.qop.certa{border-color:var(--verde);background:var(--verde2)}
+.qop.certa b{background:var(--verde);color:#fff}
+.qop.errada{border-color:#d9534f;background:#fdecec}
+.qop.errada b{background:#d9534f;color:#fff}
+.qfb{border-radius:12px;padding:12px;margin:8px 0 12px;font-size:15px;line-height:1.5}
+.qfb.ok{background:var(--verde2)}.qfb.no{background:#fdecec}
+.qbar{height:6px;background:#eef0f3;border-radius:6px;overflow:hidden;margin:6px 0 10px}.qbar i{display:block;height:100%;background:var(--laranja)}
 button.cel{width:100%;border:0;font:inherit;font-size:11px;font-weight:600}
 .dia{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:12px 0;border-top:1px solid var(--linha)}
 .dia:first-of-type{border-top:0}
@@ -260,6 +271,122 @@ function urlPdf(pv){return 'https://arquivos.qconcursos.com/prova/arquivo_prova/
 function urlGab(pv){return 'https://arquivos.qconcursos.com/prova/arquivo_gabarito/'+pv.id+'/'+pv.slug+'-gabarito.pdf'}
 function ytUrl(id){return 'https://www.youtube.com/watch?v='+id}
 
+// ===== QUESTÕES DE TREINO (estilo IDCAP) — escritas para o app =====
+const TEXTOS = {
+ T1: `<b>O trabalho que ninguém vê</b><br><br>Quem passa de carro pela avenida do porto costuma enxergar apenas os navios e as pilhas coloridas de contêineres. Poucos percebem que, por trás de cada carga embarcada, existe uma rede de pessoas trabalhando em turnos que atravessam a madrugada. São conferentes, estivadores, operadores de guindaste e vigias que mantêm a mercadoria circulando enquanto a cidade dorme.<br><br>Nos últimos anos, a chegada de equipamentos automatizados mudou a rotina dessas equipes. Muitas tarefas que antes exigiam força física passaram a depender de atenção, leitura de sistemas e comunicação rápida. Isso não significa que o esforço tenha desaparecido: significa que ele mudou de forma. Um erro de digitação numa planilha de carga, por exemplo, pode atrasar um navio inteiro.<br><br>Por isso, as empresas do setor têm valorizado trabalhadores que, além de preparo físico, saibam interpretar instruções, fazer cálculos simples e seguir normas de segurança. O porto continua sendo um lugar de músculos, mas cada vez mais é também um lugar de cabeça.<br><br><i>(Texto escrito para este app.)</i>`,
+ T2: `<b>New cranes arrive at Bay Port</b><br><br>Last month, Bay Port received three new cranes to load and unload container ships faster. According to the port manager, the new equipment can move up to 40 containers per hour, almost twice the speed of the old cranes. However, the cranes will only start working in March, because the operators need special training first. “Safety is our priority. Nobody will use the new cranes without a certificate,” the manager said. The port also plans to hire 50 new workers this year.<br><br><i>(Texto escrito para este app. Bay Port é um porto fictício.)</i>`,
+};
+const QUIZ = {
+ // ---------- DIA 1 ----------
+ '0p': {texto:'T1', qs:[
+  {e:'A ideia central do texto é:', o:['A automação acabou com o trabalho físico nos portos.','O trabalho portuário, pouco visto pela cidade, mudou e passou a exigir também atenção, leitura e cálculo.','Os moradores da cidade reclamam do movimento do porto durante a noite.','Os erros de digitação são a principal causa de atraso dos navios.'], c:1, x:'A ideia central junta os três parágrafos: o trabalho é pouco visto (1º), mudou com a automação (2º) e hoje exige força E raciocínio (3º). Dizer que a automação acabou com o trabalho físico contradiz o texto ("isso não significa que o esforço tenha desaparecido"), e o erro de digitação é só um exemplo, uma ideia secundária.'},
+  {e:'No 2º parágrafo, o exemplo do “erro de digitação numa planilha de carga” serve para:', o:['criticar os trabalhadores que não sabem usar o computador.','mostrar que a nova rotina exige atenção, pois um erro pequeno pode ter grande consequência.','provar que os navios do porto atrasam com frequência.','defender a volta do trabalho totalmente manual.'], c:1, x:'Exemplos sustentam a ideia do parágrafo. Aqui, o exemplo mostra que o esforço "mudou de forma": agora um descuido de atenção pode atrasar um navio inteiro. É uma ideia secundária a serviço da principal.'},
+  {e:'Pode-se inferir do texto que:', o:['os trabalhadores portuários atuam apenas durante o dia.','o porto também funciona durante a noite.','os vigias foram substituídos por máquinas.','as empresas deixaram de exigir preparo físico.'], c:1, x:'Inferir é concluir algo que o texto não diz com todas as letras, mas deixa claro. "Turnos que atravessam a madrugada" e "enquanto a cidade dorme" permitem concluir que o porto funciona à noite. Dizer que as empresas deixaram de exigir preparo físico está errado, porque o texto diz "além de preparo físico".'},
+  {e:'Na frase “Isso não significa que o esforço tenha desaparecido”, o pronome “Isso” retoma:', o:['a avenida do porto.','a mudança na rotina das equipes causada pelos equipamentos automatizados.','o erro de digitação na planilha.','o preparo físico dos trabalhadores.'], c:1, x:'Pronomes como "isso" retomam o que foi dito antes. Logo antes, o texto fala que as tarefas passaram a depender de atenção e leitura por causa da automação. É essa mudança que "isso" retoma.'},
+  {e:'Em “Por isso, as empresas do setor têm valorizado trabalhadores…”, a expressão “Por isso” estabelece relação de:', o:['oposição.','conclusão/consequência.','tempo.','condição.'], c:1, x:'"Por isso" introduz uma consequência do que foi dito antes: como o trabalho mudou, as empresas passaram a valorizar novas habilidades. Oposição seria "mas/porém"; condição seria "se/caso".'},
+  {e:'Na última frase, as expressões “lugar de músculos” e “lugar de cabeça” foram usadas em sentido:', o:['literal, referindo-se a partes do corpo humano.','figurado, indicando força física e raciocínio.','técnico, nomeando setores do porto.','irônico, criticando os trabalhadores.'], c:1, x:'Sentido figurado (conotativo) é quando a palavra ganha um significado além do original. "Músculos" representa a força física e "cabeça" representa o raciocínio.'},
+  {e:'Quanto ao tipo e à finalidade, o texto é predominantemente:', o:['narrativo, pois conta a história de um estivador.','dissertativo-expositivo, pois apresenta informações e uma reflexão sobre o trabalho portuário.','instrucional, pois ensina a operar um guindaste.','descritivo, pois apenas descreve a paisagem do porto.'], c:1, x:'O texto não tem personagem nem enredo (não é narrativo) e não dá ordens/passos (não é instrucional). Ele expõe informações e conclui com uma reflexão: é dissertativo-expositivo.'},
+  {e:'De acordo com o texto, é CORRETO afirmar:', o:['A automação tornou desnecessário o trabalho dos conferentes.','Quem passa pela avenida percebe facilmente todo o trabalho do porto.','Saber interpretar instruções e fazer cálculos simples passou a ser valorizado no setor.','As normas de segurança deixaram de ser importantes no porto.'], c:2, x:'O 3º parágrafo diz exatamente que as empresas valorizam quem sabe "interpretar instruções, fazer cálculos simples e seguir normas de segurança". Dizer que quem passa pela avenida percebe tudo contradiz o texto ("poucos percebem").'},
+ ]},
+ '0s': {texto:'T2', qs:[
+  {e:'The main idea of the text is: (A ideia principal do texto é:)', o:['Bay Port closed in March.','Bay Port got new cranes that will work after the operators are trained.','The old cranes were faster than the new ones.','Bay Port fired 50 workers.'], c:1, x:'O texto conta que o porto recebeu guindastes novos (cranes) que só vão funcionar em março, depois do treinamento dos operadores. A alternativa sobre demitir 50 trabalhadores inverte o sentido: "hire" é contratar, e não demitir ("fire").'},
+  {e:'In the text, the word “However” indicates: (A palavra “However” indica:)', o:['addition (adição)','contrast (contraste/oposição)','example (exemplo)','time (tempo)'], c:1, x:'"However" significa "porém / no entanto". Ele contrasta a boa notícia (guindastes rápidos) com a limitação (só funcionam em março).'},
+  {e:'According to the text, the new cranes can move: (Segundo o texto, os guindastes novos movimentam:)', o:['20 containers per hour.','40 containers per day.','up to 40 containers per hour.','50 containers per hour.'], c:2, x:'Leia procurando o número: "up to 40 containers per hour" = até 40 contêineres por hora. "Per day" seria por dia; 50 é o número de trabalhadores que o porto quer contratar.'},
+  {e:'The word “priority” is a cognate (cognato). In the text, it means:', o:['problema','prioridade','propriedade','privacidade'], c:1, x:'Cognatos são palavras parecidas com o português e com o mesmo sentido: priority = prioridade. Use os cognatos como "pistas" para entender o texto sem saber todas as palavras.'},
+  {e:'Which of these words is a FALSE cognate (falso cognato)?', o:['container = contêiner','equipment = equipamento','pretend = fingir','operator = operador'], c:2, x:'Falso cognato parece português, mas tem outro sentido. "Pretend" parece "pretender", mas significa FINGIR. (Pretender, em inglês, é "intend".) Outros clássicos: "actually" = na verdade; "push" = empurrar.'},
+ ]},
+ // ---------- DIA 2 ----------
+ '1p': {qs:[
+  {e:'O resultado de (−8) + 5 − (−3) é:', o:['−6','0','6','−16'], c:1, x:'Menos com menos vira mais: −(−3) = +3. Então: −8 + 5 + 3 = −8 + 8 = 0.'},
+  {e:'O valor da expressão 20 − 3 × 4 + 6 ÷ 2 é:', o:['11','71','37','3'], c:0, x:'Primeiro multiplicação e divisão, depois soma e subtração: 3 × 4 = 12 e 6 ÷ 2 = 3. Fica 20 − 12 + 3 = 11.'},
+  {e:'O valor de (−3) × (−4) − 10 é:', o:['−22','2','−2','22'], c:1, x:'Sinais iguais na multiplicação dão positivo: (−3) × (−4) = +12. Depois, 12 − 10 = 2.'},
+  {e:'O valor de [10 − (2 + 3) × 2] + 7 é:', o:['17','7','0','27'], c:1, x:'Resolva de dentro para fora: (2 + 3) = 5; 5 × 2 = 10; 10 − 10 = 0; 0 + 7 = 7.'},
+  {e:'Às 5h, a temperatura no cais era de −6 °C. Até as 10h, ela subiu 9 °C. Qual a temperatura às 10h?', o:['15 °C','−15 °C','3 °C','−3 °C'], c:2, x:'Subir 9 graus a partir de −6: −6 + 9 = 3. Use a reta numérica: de −6 até 0 são 6 passos; faltam 3 depois do zero.'},
+  {e:'Um trabalhador tinha R$ 120,00 na conta e pagou duas contas: R$ 75,00 e R$ 90,00. Qual ficou o saldo?', o:['R$ 45,00','−R$ 45,00','R$ 285,00','−R$ 285,00'], c:1, x:'Total pago: 75 + 90 = 165. Saldo: 120 − 165 = −45. O saldo fica negativo em 45 reais.'},
+  {e:'O valor de (−2)³ é:', o:['8','−8','−6','6'], c:1, x:'(−2)³ = (−2) × (−2) × (−2). Os dois primeiros dão +4; 4 × (−2) = −8. Base negativa com expoente ímpar dá resultado negativo.'},
+  {e:'Um turno tem 3 equipes de 12 trabalhadores. Hoje, 7 faltaram. Quantos trabalharam?', o:['29','43','33','31'], c:0, x:'Total: 3 × 12 = 36 trabalhadores. Com 7 faltas: 36 − 7 = 29.'},
+ ]},
+ '1s': {qs:[
+  {e:'No Windows, o programa usado para navegar entre pastas e abrir, copiar ou mover arquivos é o:', o:['Explorador de Arquivos','Painel de Controle','Bloco de Notas','Gerenciador de Tarefas'], c:0, x:'O Explorador de Arquivos (atalho: tecla Windows + E) mostra as unidades, pastas e arquivos do computador.'},
+  {e:'Uma pasta, no Windows, serve principalmente para:', o:['aumentar a memória do computador.','organizar arquivos, agrupando-os.','proteger o computador contra vírus.','conectar o computador à internet.'], c:1, x:'Pastas (diretórios) servem para organizar: guardar arquivos relacionados juntos. Uma pasta pode ter outras pastas dentro (subpastas).'},
+  {e:'Um arquivo com a extensão .docx foi criado, normalmente, no:', o:['Microsoft Excel','Microsoft Word','Paint','Windows Media Player'], c:1, x:'Extensões indicam o tipo do arquivo: .docx = Word (texto); .xlsx = Excel (planilha); .pptx = PowerPoint; .jpg/.png = imagem; .pdf = documento PDF.'},
+  {e:'Por padrão, ao selecionar um arquivo do disco do computador e apertar a tecla Delete, ele:', o:['é apagado para sempre.','vai para a Lixeira.','é copiado para a área de trabalho.','é enviado por e-mail.'], c:1, x:'Com Delete, o arquivo vai para a Lixeira e ainda pode ser restaurado. Só sai de vez quando a Lixeira é esvaziada.'},
+  {e:'Para excluir um arquivo direto, SEM passar pela Lixeira, usa-se o atalho:', o:['Ctrl + Z','Shift + Delete','Alt + F4','Ctrl + C'], c:1, x:'Shift + Delete exclui permanentemente (o Windows pede confirmação). Ctrl + Z desfaz, Alt + F4 fecha a janela e Ctrl + C copia.'},
+  {e:'Ao arrastar com o mouse um arquivo para outra pasta da MESMA unidade (mesmo disco), por padrão o Windows:', o:['copia o arquivo.','move o arquivo.','exclui o arquivo.','renomeia o arquivo.'], c:1, x:'Mesma unidade: arrastar MOVE. Unidade diferente (ex.: do C: para um pen drive): arrastar COPIA. Essa regra cai muito em prova.'},
+  {e:'Os atalhos Ctrl + C e Ctrl + V servem, respectivamente, para:', o:['cortar e colar.','copiar e colar.','colar e copiar.','salvar e abrir.'], c:1, x:'Ctrl + C copia, Ctrl + X recorta (corta) e Ctrl + V cola. Ctrl + Z desfaz a última ação.'},
+  {e:'Para renomear um arquivo selecionado no Explorador de Arquivos, a tecla de atalho é:', o:['F1','F2','F5','F12'], c:1, x:'F2 renomeia. F1 abre a ajuda e F5 atualiza a janela.'},
+  {e:'A Área de Trabalho do Windows é:', o:['a tela principal, com ícones, papel de parede e a barra de tarefas.','um programa para editar textos.','a pasta onde ficam os arquivos apagados.','o local onde o Windows guarda as senhas.'], c:0, x:'A Área de Trabalho (desktop) é a tela que aparece ao ligar o computador, com ícones e, embaixo, a barra de tarefas com o botão Iniciar.'},
+  {e:'Qual destes NÃO é um nome válido para um arquivo no Windows?', o:['relatorio_2026.txt','carga:navio.txt','lista final.xlsx','foto-01.jpg'], c:1, x:'O Windows não aceita estes caracteres em nomes de arquivo: \\ / : * ? " < > |. Espaço, traço e sublinhado podem.'},
+ ]},
+ // ---------- DIA 3 ----------
+ '2p': {qs:[
+  {e:'Assinale a palavra escrita corretamente:', o:['excessão','exceção','esceção','excesão'], c:1, x:'A grafia correta é "exceção" (com XC e Ç). Lembre de "exceto". Já "excesso" é com SS: palavras parecidas, grafias diferentes.'},
+  {e:'Qual das palavras abaixo deve receber acento gráfico?', o:['juiz','saida','raiz','ruim'], c:1, x:'"Saída" leva acento porque o I tônico forma sozinho a sílaba (sa-í-da). Em "juiz" e "raiz", o I vem seguido de Z na mesma sílaba; em "ruim", de M. Por isso esses não levam acento.'},
+  {e:'De acordo com o Novo Acordo Ortográfico, está correta a grafia:', o:['idéia','vôo','ideia','enjôo'], c:2, x:'O Novo Acordo tirou o acento dos ditongos abertos ÉI e ÓI em paroxítonas (ideia, assembleia, heroico) e das palavras terminadas em ÔO e ÊEM (voo, enjoo, leem, veem).'},
+  {e:'Assinale a alternativa em que todas as palavras são paroxítonas acentuadas:', o:['fácil, táxi, órfão','café, sofá, você','lâmpada, médico, pássaro','avião, jacaré, cipó'], c:0, x:'Paroxítona tem a sílaba tônica na penúltima. Leva acento quando termina em L, I, ÃO, entre outras: fá-cil, tá-xi, ór-fão. Café, sofá e você são oxítonas; lâmpada, médico e pássaro são proparoxítonas.'},
+  {e:'Assinale a alternativa que tem apenas palavras proparoxítonas:', o:['árvore, música, lâmpada','caráter, fácil, útil','café, jacaré, maré','avião, mamão, pião'], c:0, x:'Proparoxítona tem a tônica na antepenúltima sílaba (ár-vo-re, mú-si-ca, lâm-pa-da). TODAS as proparoxítonas levam acento, o que é a regra mais fácil.'},
+  {e:'Assinale a frase em que “mas” ou “mais” foi usado corretamente:', o:['Ele trabalhou muito, mais não recebeu.','Quero mas um café.','Ele estudou, mas não passou.','Ela é a mas rápida da equipe.'], c:2, x:'"Mas" indica oposição (= porém). "Mais" indica quantidade/intensidade (oposto de "menos"). Dica: se der para trocar por "porém", é MAS.'},
+  {e:'Assinale a grafia correta:', o:['privilégio','previlégio','privilejio','previlejio'], c:0, x:'Privilégio: com I na primeira sílaba (pri) e G antes de I. É um erro muito comum escrever "previlégio".'},
+  {e:'Complete corretamente: “Os conferentes ___ muito trabalho hoje.”', o:['tem','têm','tém','teem'], c:1, x:'O verbo TER no plural leva acento circunflexo: ele tem / eles têm. O mesmo vale para vir: ele vem / eles vêm. A forma "teem" não existe.'},
+  {e:'Pelo Novo Acordo Ortográfico, qual palavra PERDEU o acento?', o:['herói','papéis','heroico','chapéu'], c:2, x:'O acento sumiu apenas do ditongo aberto em PAROXÍTONAS: heroico, ideia, jiboia. Nas OXÍTONAS e monossílabas ele continua: herói, papéis, chapéu, céu.'},
+  {e:'Complete: “Ninguém explicou ___ o navio atrasou.”', o:['porque','por que','porquê','por quê'], c:1, x:'"Por que" separado e sem acento = "pelo motivo pelo qual", inclusive em pergunta indireta, como aqui. "Porque" junto é resposta/explicação; "porquê" é substantivo ("o porquê"); "por quê" fica no fim da frase.'},
+  {e:'Assinale a grafia correta:', o:['com certeza','concerteza','com serteza','conserteza'], c:0, x:'"Com certeza" são duas palavras: a preposição "com" e o substantivo "certeza". Não existe a forma junta.'},
+  {e:'De acordo com o Novo Acordo, está correta a grafia:', o:['micro-ondas','microondas','auto-escola','contra-regra'], c:0, x:'Usa-se hífen quando o prefixo termina com a mesma vogal que começa a palavra: micro-ondas, anti-inflamatório. Prefixo terminado em vogal + palavra com R ou S: dobra a letra e junta (contrarregra). Vogais diferentes: junta (autoescola).'},
+ ]},
+ '2s': {qs:[
+  {e:'Complete: “She ___ a port worker.”', o:['am','is','are','be'], c:1, x:'Verbo to be no presente: I am / you are / he, she, it is / we, you, they are. "She" pede IS.'},
+  {e:'Complete: “They ___ at the dock now.”', o:['is','am','are','be'], c:2, x:'"They" (eles/elas) pede ARE. Dock = doca, cais.'},
+  {e:'Complete: “I ___ tired after the shift.”', o:['is','are','am','be'], c:2, x:'"I" pede AM: I am = eu sou/estou. Shift = turno.'},
+  {e:'Qual artigo se usa antes de “hour” (“uma hora”), que começa com som de vogal?', o:['a','an','the (obrigatório)','nenhum'], c:1, x:'Usa-se "an" antes de SOM de vogal: an hour (o H não é pronunciado), an engineer. Antes de som de consoante, "a": a ship, a crane.'},
+  {e:'“Maria and I” pode ser substituído pelo pronome:', o:['they','we','you','she'], c:1, x:'Eu + outra pessoa = nós = WE. "They" seria eles/elas, sem incluir você.'},
+  {e:'Complete com o pronome correto: “Give the helmet to ___.” (a ele)', o:['he','him','his','her'], c:1, x:'Depois de preposição (to, for, with), usa-se o pronome objeto: me, you, HIM, her, it, us, them. "He" é sujeito e "his" indica posse (dele).'},
+  {e:'Qual é a forma negativa correta de “He is ready”?', o:['He is not ready.','He not is ready.','He does not is ready.','He isn\'t is ready.'], c:0, x:'No verbo to be, a negação é só colocar NOT depois do verbo: is not (isn\'t). Não se usa "do/does" com o verbo to be.'},
+  {e:'Qual é a forma interrogativa correta de “You are the captain”?', o:['You are the captain?','Are you the captain?','Do you are the captain?','Is you the captain?'], c:1, x:'Para perguntar com o verbo to be, inverta o verbo e o sujeito: You are → Are you…?'},
+ ]},
+ // ---------- DIA 4 ----------
+ '3p': {qs:[
+  {e:'O resultado de 1/2 + 1/4 é:', o:['2/6','3/4','1/6','2/4'], c:1, x:'Para somar frações, iguale os denominadores: 1/2 = 2/4. Então 2/4 + 1/4 = 3/4. Nunca some os denominadores.'},
+  {e:'Quanto é 3/5 de 40?', o:['24','15','8','30'], c:0, x:'"De" é multiplicação: 40 ÷ 5 = 8 (isso é 1/5); 8 × 3 = 24 (isso é 3/5).'},
+  {e:'O número 0,75 escrito como fração irredutível é:', o:['7/5','3/4','75/10','1/4'], c:1, x:'0,75 = 75/100. Dividindo em cima e embaixo por 25: 3/4.'},
+  {e:'O resultado de 2,5 + 1,35 é:', o:['3,85','3,40','1,60','4,85'], c:0, x:'Some alinhando as vírgulas: 2,50 + 1,35 = 3,85.'},
+  {e:'O resultado de 4,2 × 3 é:', o:['12,6','1,26','126','12,06'], c:0, x:'Calcule 42 × 3 = 126 e devolva uma casa decimal (4,2 tem uma casa): 12,6.'},
+  {e:'Qual é o MAIOR número entre os abaixo?', o:['0,7','2/3','0,65','3/5'], c:0, x:'Transforme tudo em decimal: 2/3 ≈ 0,666; 3/5 = 0,6. Comparando 0,7 / 0,666 / 0,65 / 0,6, o maior é 0,7.'},
+  {e:'Um navio trazia 1.200 contêineres. Até o meio-dia, foram descarregados 3/8 deles. Quantos ainda faltam descarregar?', o:['450','750','800','400'], c:1, x:'3/8 de 1.200: 1.200 ÷ 8 = 150; 150 × 3 = 450 descarregados. Faltam 1.200 − 450 = 750 (ou seja, 5/8 da carga).'},
+  {e:'O resultado de 9,6 ÷ 4 é:', o:['2,4','24','0,24','2,04'], c:0, x:'96 ÷ 4 = 24 e devolva a casa decimal: 2,4. Confira: 2,4 × 4 = 9,6.'},
+ ]},
+ '3s': {qs:[
+  {e:'A Lei nº 12.815/2013 é conhecida como:', o:['Lei dos Portos','Consolidação das Leis do Trabalho (CLT)','Norma Regulamentadora 29','Código Civil'], c:0, x:'A Lei 12.815/2013 é a Lei dos Portos: trata da exploração dos portos e instalações portuárias e das atividades dos operadores portuários, incluindo o OGMO e o trabalho portuário.'},
+  {e:'Segundo a Lei 12.815/2013, “porto organizado” é:', o:['bem público construído e aparelhado para atender às necessidades de navegação, de movimentação de passageiros ou de movimentação e armazenagem de mercadorias, sob jurisdição de autoridade portuária.','qualquer instalação privada à beira-mar.','a empresa que contrata trabalhadores avulsos.','o sindicato dos trabalhadores portuários.'], c:0, x:'É a definição do art. 2º, I. Palavras-chave para a prova: BEM PÚBLICO + infraestrutura e operações sob jurisdição de AUTORIDADE PORTUÁRIA.'},
+  {e:'De acordo com a Lei 12.815/2013, terminal de uso privado (TUP) é a instalação portuária:', o:['explorada mediante autorização e localizada FORA da área do porto organizado.','explorada pela União DENTRO do porto organizado.','administrada pelo OGMO.','usada apenas por navios da Marinha.'], c:0, x:'TUP = AUTORIZAÇÃO + FORA da área do porto organizado. Dentro do porto organizado, a exploração por particulares se dá por arrendamento ou concessão.'},
+  {e:'Para a Lei 12.815/2013, operador portuário é:', o:['a pessoa jurídica pré-qualificada para movimentar passageiros ou movimentar e armazenar mercadorias, destinadas ou provenientes de transporte aquaviário, dentro da área do porto organizado.','qualquer trabalhador portuário avulso cadastrado.','o órgão federal que fiscaliza os portos.','a pessoa física que opera guindastes.'], c:0, x:'Operador portuário é EMPRESA (pessoa jurídica) PRÉ-QUALIFICADA que atua DENTRO do porto organizado. Trabalhador avulso é pessoa física, e não se confunde com o operador.'},
+  {e:'Segundo a Lei 12.815/2013, arrendamento é:', o:['a cessão onerosa de área e infraestrutura públicas localizadas dentro do porto organizado, para exploração por prazo determinado.','a venda definitiva de uma área do porto para uma empresa.','a contratação de trabalhadores avulsos pelo OGMO.','a autorização para construir porto fora da área do porto organizado.'], c:0, x:'Arrendamento = cessão ONEROSA (paga) de ÁREA dentro do porto organizado, por PRAZO DETERMINADO. Não é venda. Fora do porto organizado, o instrumento é a autorização.'},
+  {e:'Segundo a Lei 12.815/2013, concessão é:', o:['a cessão onerosa do porto organizado, com vistas à administração e à exploração de sua infraestrutura por prazo determinado.','a doação de um porto público a uma empresa privada.','o registro do trabalhador portuário no OGMO.','a permissão para um navio atracar.'], c:0, x:'Concessão envolve o PORTO ORGANIZADO como um todo (administração e exploração da infraestrutura). Arrendamento envolve uma ÁREA dentro dele. Os dois são onerosos e por prazo determinado.'},
+  {e:'Segundo a Lei 12.815/2013, o Órgão de Gestão de Mão de Obra (OGMO) de cada porto organizado é constituído:', o:['pelos operadores portuários.','pelos trabalhadores portuários avulsos.','pela Marinha do Brasil.','pelo sindicato dos estivadores.'], c:0, x:'O art. 32 diz que os OPERADORES PORTUÁRIOS devem constituir, em cada porto organizado, um órgão de gestão de mão de obra do trabalho portuário.'},
+  {e:'São atividades de trabalho portuário previstas na Lei 12.815/2013, EXCETO:', o:['capatazia','estiva','conserto de carga','praticagem'], c:3, x:'O trabalho portuário (art. 40) é: capatazia, estiva, conferência de carga, conserto de carga, bloco e vigilância de embarcações. A praticagem é tratada em outro capítulo da lei e não está nessa lista.'},
+ ]},
+ // ---------- DIA 5 ----------
+ '4p': {qs:[
+  {e:'O mínimo múltiplo comum (MMC) entre 4 e 6 é:', o:['24','12','2','10'], c:1, x:'Múltiplos de 4: 4, 8, 12, 16… Múltiplos de 6: 6, 12, 18… O menor comum é 12.'},
+  {e:'O máximo divisor comum (MDC) entre 18 e 24 é:', o:['3','6','12','72'], c:1, x:'Divisores de 18: 1, 2, 3, 6, 9, 18. Divisores de 24: 1, 2, 3, 4, 6, 8, 12, 24. O maior comum é 6.'},
+  {e:'Um navio atraca no porto a cada 6 dias e outro a cada 8 dias. Hoje os dois atracaram juntos. Daqui a quantos dias eles vão atracar juntos de novo?', o:['14 dias','24 dias','48 dias','2 dias'], c:1, x:'"Encontrar de novo / ao mesmo tempo" é MMC. MMC(6, 8) = 24.'},
+  {e:'Duas cordas, de 36 m e de 48 m, serão cortadas em pedaços iguais, do maior tamanho possível, sem sobrar nada. Qual o tamanho de cada pedaço?', o:['6 m','12 m','4 m','24 m'], c:1, x:'"Dividir em partes iguais, o maior possível, sem sobra" é MDC. MDC(36, 48) = 12 m. Ficam 3 pedaços de uma corda e 4 da outra.'},
+  {e:'O MMC entre 3, 5 e 10 é:', o:['15','30','150','60'], c:1, x:'Os múltiplos de 10 são 10, 20, 30… O 30 é o primeiro que também é múltiplo de 3 e de 5.'},
+  {e:'O MDC entre 15 e 25 é:', o:['5','3','75','1'], c:0, x:'Divisores de 15: 1, 3, 5, 15. Divisores de 25: 1, 5, 25. O maior comum é 5.'},
+  {e:'Duas luzes de sinalização piscam juntas agora. Uma pisca a cada 12 segundos e a outra a cada 18 segundos. Depois de quantos segundos vão piscar juntas outra vez?', o:['6 s','30 s','36 s','216 s'], c:2, x:'É MMC de novo (voltam a coincidir). MMC(12, 18) = 36 segundos.'},
+  {e:'O almoxarifado tem 60 capacetes e 84 pares de luvas. Quer montar o MAIOR número possível de kits iguais, sem sobrar nada. Quantos kits serão montados?', o:['6','12','24','4'], c:1, x:'Maior número de grupos iguais sem sobra é MDC. MDC(60, 84) = 12 kits, cada um com 5 capacetes e 7 pares de luvas.'},
+ ]},
+ '4s': {qs:[
+  {e:'Complete: “He ___ at the port every day.” (trabalhar)', o:['work','works','is work','working'], c:1, x:'Presente simples com he/she/it: o verbo ganha S: he works. "Every day" indica rotina, então é presente simples.'},
+  {e:'Complete: “Look! The crane ___ a container now.” (levantar)', o:['lifts','is lifting','lift','are lifting'], c:1, x:'"Look!" e "now" indicam uma ação acontecendo agora: presente contínuo (am/is/are + verbo com -ing). Com "the crane" (it), usa-se IS lifting.'},
+  {e:'Complete a negativa: “They ___ on Sundays.” (não trabalham)', o:["don't work","doesn't work","aren't work",'not work'], c:0, x:'Negativa do presente simples: don\'t (do not) para I/you/we/they e doesn\'t para he/she/it, sempre com o verbo sem S.'},
+  {e:'Complete a pergunta: “___ she speak English?”', o:['Do','Does','Is','Are'], c:1, x:'Pergunta no presente simples com he/she/it usa DOES, e o verbo fica sem S: Does she speak…?'},
+  {e:'Qual frase está no presente contínuo?', o:['We load the ship every morning.','We are loading the ship.','We loaded the ship.','We will load the ship.'], c:1, x:'Presente contínuo = am/is/are + verbo-ing (are loading). "We load… every morning" é presente simples, "loaded" é passado e "will load" é futuro.'},
+  {e:'Palavras como “always”, “usually” e “every day” geralmente indicam o uso do:', o:['simple present (presente simples)','present continuous (presente contínuo)','simple past (passado)','future (futuro)'], c:0, x:'Palavras de frequência/rotina (always = sempre, usually = geralmente, every day = todo dia) pedem presente simples.'},
+  {e:'Complete: “I ___ English right now.” (estudar)', o:['study','studies','am studying','is studying'], c:2, x:'"Right now" (agora mesmo) pede presente contínuo. Com "I", usa-se AM + studying.'},
+  {e:'Complete: “The ship ___ at 6 a.m. every Monday.” (chegar)', o:['arrive','arrives','arriving','are arriving'], c:1, x:'Rotina (every Monday) + it (the ship) = presente simples com S: arrives.'},
+ ]},
+};
+
 const FORCA = {
  1:['Flexão de braço 3 × 6 a 10 (pode apoiar o joelho)','Abdominal supra 3 × 15','Prancha 3 × 20 s'],
  2:['Flexão de braço 3 × 8 a 12','Abdominal supra 3 × 15','Abdominal remador 2 × 10','Prancha 3 × 25 s'],
@@ -352,7 +479,7 @@ function hojeISO(){return iso(agora())}
 /* ================== ESTADO ================== */
 const CHAVE='planoOgmo.v1';
 let S = carregar();
-function novo(){return {nome:'',inicio:null,manha:'07:00',tarde:'18:00',estudo:{},treino:{},testes:{},erros:[],pausas:[]}}
+function novo(){return {nome:'',inicio:null,manha:'07:00',tarde:'18:00',estudo:{},treino:{},testes:{},erros:[],pausas:[],quiz:{}}}
 function carregar(){
   try{const s=JSON.parse(localStorage.getItem(CHAVE));if(s&&typeof s==='object')return Object.assign(novo(),s);}catch(e){}
   return novo();
@@ -478,7 +605,10 @@ function botoes(i,lado){
   const x=STUDY[i], m=lado==='p'?x.p[0]:x.s[0];
   const vids=(AULAS[i]&&AULAS[i][lado])||[];
   let h=vids.map(v=>`<a class="btn" href="${ytUrl(v[0])}" target="_blank">▶ ${esc(v[1])}</a>`).join('');
-  if(MATERIAS.includes(m)) h+=`<button class="btn" onclick="verQuestoes('${m}')">✎ Questões de OGMO</button>`;
+  const qk=i+lado;
+  if(QUIZ[qk]){const r=(S.quiz||{})[qk];const n=QUIZ[qk].qs.length;
+    h+=`<button class="btn ${r?'verde':'laranja'}" onclick="abrirQuiz('${qk}')">📝 ${r?`Questões feitas: ${r.acertos} de ${n} · ver/refazer`:`Fazer as ${n} questões do dia`}</button>`;}
+  if(MATERIAS.includes(m)) h+=`<button class="btn cinza" onclick="verQuestoes('${m}')">📄 Provas reais de OGMO</button>`;
   return h?`<div class="acoes" style="flex-direction:column;align-items:stretch">${h}</div>`:'';
 }
 function verQuestoes(m){
@@ -664,6 +794,12 @@ function telaProg(){
   h+=`<div class="card"><h2>Por matéria</h2><div class="meta">Horas estudadas de cada matéria</div>`;
   progressoMaterias().forEach(x=>{const cor=CORES[x.m]||'#5d6b7a';h+=`<div class="mat"><div class="l"><span>${x.m}</span><span>${x.pct}% · ${String(x.h).replace('.',',')} de ${String(x.th).replace('.',',')} h</span></div><div class="b"><i style="width:${x.pct}%;background:${cor}"></i></div></div>`});
   h+=`</div>`;
+  const ac=acertosPorMateria();
+  if(Object.keys(ac).length){
+    h+=`<div class="card"><h2>Acertos nas questões</h2><div class="meta">Questões de treino feitas no app</div>`;
+    Object.entries(ac).forEach(([m,v])=>{const p=Math.round(100*v.a/v.n);h+=`<div class="mat"><div class="l"><span>${esc(m)}</span><span>${p}% · ${v.a} de ${v.n}</span></div><div class="b"><i style="width:${p}%;background:${p>=70?'var(--verde)':p>=50?'var(--laranja)':'#d9534f'}"></i></div></div>`});
+    h+=`<div class="peq" style="margin-top:6px">Verde: 70% ou mais. Abaixo de 50%, reveja as aulas e o caderno dessa matéria.</div></div>`;
+  }
   // testes
   const tf=[], tc=[];
   TRAIN.forEach((t,i)=>{if(t.teste==='forca')tf.push(i);if(t.teste==='corrida')tc.push(i)});
@@ -745,6 +881,74 @@ function verTreino(i){
   abrirModal(h);
 }
 
+/* ================== QUESTÕES (QUIZ) ================== */
+let QZ=null;
+function ordem(key,j,n){ // embaralha as alternativas sempre do mesmo jeito e distribui a certa entre A, B, C e D
+  let h=2166136261; for(const ch of key+'#'+j){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}
+  let hk=0; for(const ch of key) hk=(hk*31+ch.charCodeAt(0))>>>0;
+  const c=QUIZ[key].qs[j].c, outras=[...Array(n).keys()].filter(x=>x!==c);
+  for(let k=outras.length-1;k>0;k--){h=(Math.imul(h,1103515245)+12345)>>>0;const r=h%(k+1);[outras[k],outras[r]]=[outras[r],outras[k]]}
+  const pos=(hk+j*3+(h>>>8))%n; outras.splice(pos,0,c); return outras;
+}
+function materiaDoQuiz(key){const i=parseInt(key),l=key.slice(-1);const x=STUDY[i];return l==='p'?x.p[0]:x.s[0]}
+function abrirQuiz(key){
+  const r=(S.quiz||{})[key];
+  QZ={key, j:0, resp:[], acertos:0, fim:false};
+  if(r){QZ.fim=true;QZ.resp=r.r||[];QZ.acertos=r.acertos;}
+  renderQuiz();
+}
+function renderQuiz(){
+  const Q=QUIZ[QZ.key], n=Q.qs.length, m=materiaDoQuiz(QZ.key);
+  if(QZ.fim){
+    const pct=Math.round(100*QZ.acertos/n);
+    let h=`<h3>Resultado · ${esc(m)}</h3><div class="vazio" style="padding:10px"><div class="grande">${pct>=70?'🎯':pct>=50?'👍':'💪'}</div><b style="font-size:22px">${QZ.acertos} de ${n} certas (${pct}%)</b><div class="peq" style="margin-top:6px">${pct>=70?'Muito bem! Revise os erros no caderno.':'Normal no começo. Os erros já foram para o caderno de erros e voltam na revisão.'}</div></div>`;
+    h+=`<div class="peq" style="margin:4px 0 10px">Questões de treino no estilo da banca IDCAP, escritas para este app.</div>`;
+    h+=`<button class="btn cheio grande" onclick="QZ={key:'${QZ.key}',j:0,resp:[],acertos:0,fim:false};renderQuiz()">Refazer as questões</button>`;
+    h+=`<button class="btn cinza grande" style="margin-top:8px" onclick="fecharModal();render()">Fechar</button>`;
+    abrirModal(h); return;
+  }
+  const q=Q.qs[QZ.j], ord=ordem(QZ.key,QZ.j,q.o.length), resp=QZ.resp[QZ.j];
+  let h=`<div class="peq"><b>${esc(m)}</b> · Questão ${QZ.j+1} de ${n} · treino estilo IDCAP</div><div class="qbar"><i style="width:${100*QZ.j/n}%"></i></div>`;
+  if(Q.texto) h+=`<details class="qtexto" ${QZ.j===0||resp==null?'open':''}><summary style="font-weight:700;cursor:pointer">Texto para as questões</summary><div style="margin-top:8px">${TEXTOS[Q.texto]}</div></details>`;
+  h+=`<div class="qenun">${esc(q.e)}</div>`;
+  ord.forEach((oi,pos)=>{
+    let cls='qop'; if(resp!=null){ if(oi===q.c) cls+=' certa'; else if(oi===resp) cls+=' errada'; }
+    h+=`<button class="${cls}" ${resp!=null?'disabled':''} onclick="responder(${oi})"><b>${'ABCD'[pos]}</b><span>${esc(q.o[oi])}</span></button>`;
+  });
+  if(resp!=null){
+    const ok=resp===q.c, letra='ABCD'[ord.indexOf(q.c)];
+    h+=`<div class="qfb ${ok?'ok':'no'}"><b>${ok?'✓ Certo!':'✗ Errado. A resposta certa é a letra '+letra+'.'}</b><br>${esc(q.x)}${ok?'':'<br><span class="peq">Este erro foi para o seu caderno de erros.</span>'}</div>`;
+    h+=`<button class="btn cheio grande" onclick="proxima()">${QZ.j+1<n?'Próxima questão →':'Ver resultado'}</button>`;
+  }
+  h+=`<button class="btn cinza grande" style="margin-top:8px" onclick="fecharModal();render()">Sair (continua depois)</button>`;
+  abrirModal(h);
+  $('#folha').scrollTop=resp!=null?$('#folha').scrollHeight:0;
+}
+function responder(oi){
+  const Q=QUIZ[QZ.key], q=Q.qs[QZ.j];
+  if(QZ.resp[QZ.j]!=null) return;
+  QZ.resp[QZ.j]=oi;
+  if(oi===q.c) QZ.acertos++;
+  else {
+    const qid=QZ.key+'-'+QZ.j, ord=ordem(QZ.key,QZ.j,q.o.length);
+    S.erros=S.erros.filter(e=>e.qid!==qid);
+    S.erros.push({id:Date.now().toString(36),qid,data:hojeISO(),materia:MATERIAS.includes(materiaDoQuiz(QZ.key))?materiaDoQuiz(QZ.key):'Português',erro:q.e+' — você marcou: '+q.o[oi],regra:'Certa: '+q.o[q.c]+'. '+q.x});
+    salvar();
+  }
+  renderQuiz();
+}
+function proxima(){
+  const n=QUIZ[QZ.key].qs.length;
+  if(QZ.j+1<n){QZ.j++;renderQuiz();return;}
+  S.quiz=S.quiz||{}; S.quiz[QZ.key]={acertos:QZ.acertos,total:n,data:hojeISO(),r:QZ.resp};
+  QZ.fim=true; salvar(); renderQuiz();
+}
+function acertosPorMateria(){
+  const t={};
+  Object.entries(S.quiz||{}).forEach(([k,r])=>{const m=materiaDoQuiz(k);t[m]=t[m]||{a:0,n:0};t[m].a+=r.acertos;t[m].n+=r.total;});
+  return t;
+}
+
 /* ================== CADERNO ================== */
 let filtroCad='Todas';
 function telaCad(){
@@ -800,7 +1004,7 @@ function telaMais(){
   <button class="menu-item" onclick="exportar()">Fazer backup <span>›</span></button>
   <button class="menu-item" onclick="importar()">Restaurar backup <span>›</span></button>
   <button class="menu-item" style="color:#c0392b" onclick="zerar()">Apagar tudo e recomeçar <span>›</span></button></div>
-  <div class="peq" style="text-align:center;margin:6px 0 16px">Plano OGMO · versão 1.2</div>`;
+  <div class="peq" style="text-align:center;margin:6px 0 16px">Plano OGMO · versão 1.3</div>`;
   $('#t-mais').innerHTML=h;
 }
 function pausasFuturas(){const h=hojeISO();return S.pausas.filter(p=>p>=h).sort()}
