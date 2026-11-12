@@ -42,7 +42,7 @@ main{padding:14px 14px 0;max-width:640px;margin:0 auto}
 .tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--azul2);color:var(--azul);margin-right:6px;vertical-align:1px}
 .tag.min{background:#eef0f3;color:var(--sub)}
 .acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:10px;background:var(--azul2);color:var(--azul);font-size:14px;font-weight:600;text-decoration:none}
+.btn{display:inline-flex;align-items:center;gap:6px;line-height:1.3;text-align:left;padding:8px 12px;border-radius:10px;background:var(--azul2);color:var(--azul);font-size:14px;font-weight:600;text-decoration:none}
 .btn.cheio{background:var(--azul);color:#fff}
 .btn.laranja{background:var(--laranja);color:#fff}
 .btn.verde{background:var(--verde);color:#fff}
@@ -196,16 +196,69 @@ const STUDY = [
  // Semana 7
  {q:1, p:['Português','Questões da banca IDCAP, assuntos misturados'], s:['Inglês','Questões da banca IDCAP']},
  {q:1, p:['Matemática','Questões: porcentagem, regra de três, juros e equações'], s:['Informática','Questões da banca IDCAP']},
- {sim:1, p:['Simulado','Simulado 1: 50 questões de uma prova anterior de OGMO (site do IDCAP), em 2 horas']},
+ {sim:1, p:['Simulado','Simulado 1: prova inteira do OGMO Paranaguá 2024 (IDCAP), em 2 horas']},
  {q:1, p:['Simulado','Corrigir o simulado 1 e passar todos os erros para o caderno'], s:['Revisão','Revisar a matéria em que mais errou no simulado']},
  {q:1, p:['Matemática','Questões: geometria, funções, probabilidade e estatística'], s:['Legislação','Questões + releitura dos resumos']},
  // Semana 8
  {q:1, p:['Português','Revisão: caderno de erros e resumos'], s:['Inglês','Revisão: caderno de erros e vocabulário']},
  {q:1, p:['Matemática','Revisão: caderno de erros e resumos'], s:['Informática','Revisão: caderno de erros']},
- {sim:2, p:['Simulado','Simulado 2: 50 questões de outra prova de OGMO, em 2 horas']},
+ {sim:2, p:['Simulado','Simulado 2: prova inteira do OGMO Santarém 2026 (IDCAP), em 2 horas']},
  {q:1, p:['Simulado','Corrigir o simulado 2 e comparar com o simulado 1'], s:['Legislação','Revisão de Legislação']},
  {q:1, p:['Revisão','Revisão final: caderno de erros das 3 matérias em que mais errou'], s:['Revisão','Anotar as 3 matérias mais fracas para o modo manutenção']},
 ];
+
+
+// Aulas escolhidas para cada dia (YouTube): [id do vídeo, rótulo]
+const AULAS = {
+ 0:{p:[['W3XrpIRTgzA','Interpretação e compreensão · Profa. Pamba · 27 min'],['22iA3PPjr7c','Interpretação para concurso · Prof. Álvaro Ferreira · 45 min']], s:[['C-Mc6SlvrfM','Técnicas de leitura em inglês · Brasil Escola · 8 min'],['Tz5WW3xPzqY','False friends (falsos cognatos) · 9 min']]},
+ 1:{p:[['cFVKlZezMc0','Expressões numéricas · Gis com Giz · 9 min']], s:[['SdgTMUWRuO0','Windows para concursos · Prof. Marcelo Narciso · 46 min']]},
+ 2:{p:[['yMzzVuPIt0Q','Ortografia · Prof. Noslen · 13 min'],['Ytw1SjnqEJ8','Acentuação gráfica · 11 min']], s:[['zTWQJi_-tzQ','Verbo to be · Professor Kenny · 4 min']]},
+ 3:{p:[['YJyY6A_MOQc','Frações · 16 min'],['tkRRZEPh86w','Frações decimais · Gis com Giz · 14 min']], s:[['-uWqTXnrb_s','Concurso OGMO: Lei dos Portos · 18 min'],['4EJJ6vUTu_c','Lei dos Portos (12.815/2013) · 12 min']]},
+ 4:{p:[['yqKOhCuo3hA','MMC e MDC · Gis com Giz · 6 min']], s:[['hc99sDip2FU','Simple present x present continuous · 9 min']]},
+ 5:{p:[['CG0F824bI-Y','Classes de palavras · 17 min'],['ltrzPijgKi4','Classes de palavras (aula completa) · Prof. Álvaro Ferreira · 63 min']], s:[['VRqweGlV4IM','Passado simples · Professor Kenny · 12 min']]},
+ 6:{p:[['Kf_YzZ0CnIs','Razão e proporção · Gis com Giz · 18 min']], s:[['a5FIm41GQXM','Teclas de atalho · Prof. Marcelo Narciso · 42 min']]},
+ 7:{p:[['ltrzPijgKi4','Classes de palavras (aula completa) · Prof. Álvaro Ferreira · 63 min']], s:[['-v31oGtr5aM','Will x going to · Professor Kenny · 9 min']]},
+ 8:{p:[['mnle8NcUYkQ','Regra de três · Gis com Giz · 13 min']], s:[['kJ7gZoGQu-U','OGMO: como funciona a gestão · 24 min'],['U7IW5kuZXag','Quem é o OGMO (para a prova) · 14 min']]},
+ 9:{p:[['azedx0uou64','Porcentagem em 8 minutos · 8 min'],['OjOyNmTt7Mw','Porcentagem · Gis com Giz · 17 min']], s:[['P5S9ryDFehE','Word para concursos · 7 min']]},
+ 10:{p:[['o6X0gUpFSWs','Vírgula: 5 dicas · 8 min']], s:[['h5HHhm-n5LQ','Modal verbs · Professor Kenny · 11 min']]},
+ 11:{p:[['aZcETuhXxPw','Juros simples · Gis com Giz · 36 min']], s:[['hB73XLR24dQ','Word para concursos (aula 1) · Prof. Alan Souza · 29 min']]},
+ 12:{p:[['4ZJnTqTk4_Y','Concordância verbal · Prof. Noslen · 11 min']], s:[['S0-v8FUEVlM','In, on e at · Professor Kenny · 12 min']]},
+ 13:{p:[['ZMsieXqXwMg','Juros compostos em 8 minutos · 8 min']], s:[['CJyg6h7Wt94','Estiva x capatazia · 5 min'],['PCoT6Ru99go','Concurso OGMO RJ: legislação portuária · 18 min']]},
+ 14:{p:[['dHr5phd_qL8','Medidas de comprimento · Gis com Giz · 32 min']], s:[['xSBTVThAVqc','Inglês técnico marítimo (aula 1) · 9 min'],['TVI6jmauVGQ','Partes do navio · 2 min']]},
+ 15:{p:[['Ssb7v6KIYt8','Concordância nominal · Português com Letícia · 20 min']], s:[['CkMf6gccauY','Aula de inglês para OGMO · 32 min']]},
+ 16:{p:[['th5k6bzSDTA','Área das figuras planas · 21 min']], s:[['gjbUPN0FVVg','Excel para concursos (aula 1) · 34 min']]},
+ 17:{p:[['r4Pew3CliXI','Regência verbal · Prof. Noslen · 9 min'],['kpzcFU_zNqE','Regência nominal · Prof. Noslen · 17 min']], s:[['CilEkeJH2ZE','Inglês técnico marítimo: vocabulário · 24 min']]},
+ 18:{p:[['j6dy4VrsFvA','Equação do 1º grau · Gis com Giz · 26 min']], s:[['erqgVaLRUDQ','Aulão OGMO: Lei 9.719 · 57 min']]},
+ 19:{p:[['UECy1XbL6w8','Produtos notáveis · 11 min']], s:[['Yhvh7dRGBbI','Questões de Excel para concursos · 39 min']]},
+ 20:{p:[['yUpRa62vcSI','Crase · Prof. Noslen · 15 min']], s:[['Lz4DDUtVWMU','Inglês para concurso OGMO · 11 min']]},
+ 21:{p:[['LNLvMo1PWok','Fórmula de Bhaskara · Gis com Giz · 12 min']], s:[['d1NGqMxkp1g','PowerPoint para concursos · AlfaCon · 9 min']]},
+ 22:{p:[['l_WxqVvmyGo','Colocação pronominal · Prof. Noslen · 15 min'],['IIU6i3UXyi0','Coesão e coerência · Prof. Noslen · 5 min']], s:[['-jSpQoUJdaw','OGMO-ES 2022: simulado de inglês · 3 min']]},
+ 23:{p:[['7YeYeL2MjB4','Teorema de Pitágoras · 6 min'],['Bz1lw74k4XI','Prismas: área e volume · 11 min']], s:[['twPnV1cDvRg','Tudo sobre a NR-29 · 8 min']]},
+ 24:{p:[['nysu0K-VXR8','Função do 1º grau · 16 min'],['ZpW9Xb5iyt4','Função do 2º grau · 21 min']], s:[['C-Mc6SlvrfM','Técnicas de leitura em inglês · Brasil Escola · 8 min']]},
+ 25:{p:[['dfkvdIGqZvs','Semântica · Prof. Noslen · 14 min'],['n0e75nRstcU','Figuras de linguagem · Prof. Noslen · 14 min']], s:[['CkMf6gccauY','Aula de inglês para OGMO · 32 min']]},
+ 26:{p:[['gMGz-dB9few','Função exponencial · 22 min'],['hA9HecU1p9g','Logaritmo em 15 minutos · 16 min']], s:[['qw6xwagCt_Q','E-mail: Para, Cc e Cco · 6 min']]},
+ 27:{p:[['UbrR7An5ZfY','Período composto · Prof. Noslen · 12 min']], s:[['-jSpQoUJdaw','OGMO-ES 2022: simulado de inglês · 3 min']]},
+ 28:{p:[['_8mZOSXCRp8','Análise combinatória · 28 min'],['iNCkGogNtKI','Probabilidade · 13 min']], s:[['PCoT6Ru99go','Concurso OGMO RJ: legislação portuária · 18 min'],['YEbU8E4Q87M','OGMO Santos 2025: questões · 45 min']]},
+ 29:{p:[['GIzwKJL33_g','Média, moda e mediana · Gis com Giz · 11 min']], s:[['X2wgk02Bqt0','Segurança da informação · Prof. Danilo Vilanova · 29 min']]},
+ 30:{p:[['jyzF7FAEEyI','Português da banca IDCAP: treino · 28 min']], s:[['-jSpQoUJdaw','OGMO-ES 2022: simulado de inglês · 3 min']]},
+ 31:{p:[['SGGC2vJwt0o','Aulão de matemática da banca IDCAP · 27 min']], s:[['X88HvT8D8SM','Informática IDCAP: questões comentadas · 11 min']]},
+ 33:{s:[]},
+ 34:{p:[['WjBTrRfRy0Q','Matemática da prova do OGMO (IDCAP) · 10 min']], s:[['YEbU8E4Q87M','OGMO Santos 2025: questões · 45 min']]},
+};
+// Provas reais de OGMO aplicadas pela banca IDCAP (mesma banca do OGMO-ES)
+const PROVAS = [
+ {n:'OGMO Paranaguá (PR) 2024 · Conferente', slug:'idcap-2024-ogmo-paranagua-pr-conferente', id:131680},
+ {n:'OGMO Santarém (PA) 2026 · Conferente', slug:'idcap-2026-ogmo-stm-tpa-categoria-conferente', id:160515},
+ {n:'OGMO Santos (SP) 2024 · Estiva', slug:'idcap-2024-ogmo-santos-sp-trabalhador-portuario-avulso-estiva', id:131717},
+ {n:'OGMO Angra dos Reis (RJ) 2026 · Estiva', slug:'idcap-2026-ogmo-ar-rj-trabalhador-portuario-avulso-tpa-categoria-estiva', id:159345},
+ {n:'OGMO Santos (SP) 2025 · Capatazia', slug:'idcap-2025-ogmo-santos-sp-trabalhador-portuario-avulso-categoria-capatazia', id:149575},
+ {n:'OGMO Paranaguá (PR) 2024 · Estivador', slug:'idcap-2024-ogmo-paranagua-pr-estivador', id:131678},
+];
+const SIMULADO = {1:0, 2:1}; // simulado 1 = Paranaguá 2024; simulado 2 = Santarém 2026
+function urlOnline(pv){return 'https://www.qconcursos.com/questoes-de-concursos/provas/'+pv.slug+'/questoes'}
+function urlPdf(pv){return 'https://arquivos.qconcursos.com/prova/arquivo_prova/'+pv.id+'/'+pv.slug+'-prova.pdf'}
+function urlGab(pv){return 'https://arquivos.qconcursos.com/prova/arquivo_gabarito/'+pv.id+'/'+pv.slug+'-gabarito.pdf'}
+function ytUrl(id){return 'https://www.youtube.com/watch?v='+id}
 
 const FORCA = {
  1:['Flexão de braço 3 × 6 a 10 (pode apoiar o joelho)','Abdominal supra 3 × 15','Prancha 3 × 20 s'],
@@ -313,7 +366,7 @@ function estudoFeitoEm(dISO){for(const k in S.estudo){if(S.estudo[k]&&S.estudo[k
 function estudoAtual(){for(let i=0;i<STUDY.length;i++){if(!(S.estudo[i]&&S.estudo[i].feito))return i}return -1}
 function treinoFeitoEm(dISO){for(const k in S.treino){if(S.treino[k]===dISO)return +k}return null}
 function treinoAtual(){for(let i=0;i<TRAIN.length;i++){if(!S.treino[i])return i}return -1}
-function partes(i){return STUDY[i].sim?['p']:['rev','p','s']}
+function partes(i){return STUDY[i].sim?['p']:(i===0?['p','s']:['rev','p','s'])}
 
 // quantos dias de estudo já "deveriam" ter sido feitos até a data (inclusive)
 function esperadoAte(dISO){
@@ -421,8 +474,23 @@ function fecharModal(){$('#modal').classList.remove('on')}
 $('#modal').addEventListener('click',e=>{if(e.target.id==='modal')fecharModal()});
 function como(k){const c=COMO[k];if(!c)return;abrirModal(`<h3>${esc(c[0])}</h3><p>${esc(c[1])}</p><button class="btn cheio grande" onclick="fecharModal()">Entendi</button>`)}
 function semanaDe(i){return Math.floor(i/5)+1}
-function yt(t){return 'https://www.youtube.com/results?search_query='+encodeURIComponent(t+' para concurso')}
-function qc(){return 'https://www.qconcursos.com/questoes-de-concursos/questoes'}
+function botoes(i,lado){
+  const x=STUDY[i], m=lado==='p'?x.p[0]:x.s[0];
+  const vids=(AULAS[i]&&AULAS[i][lado])||[];
+  let h=vids.map(v=>`<a class="btn" href="${ytUrl(v[0])}" target="_blank">▶ ${esc(v[1])}</a>`).join('');
+  if(MATERIAS.includes(m)) h+=`<button class="btn" onclick="verQuestoes('${m}')">✎ Questões de OGMO</button>`;
+  return h?`<div class="acoes" style="flex-direction:column;align-items:stretch">${h}</div>`:'';
+}
+function verQuestoes(m){
+  let h=`<h3>Questões de ${esc(m)}</h3><p class="peq">São provas reais de OGMO aplicadas pela banca IDCAP, a mesma do OGMO-ES. Abra uma prova e faça só as questões de <b>${esc(m)}</b>. Cada dia, use uma prova diferente da lista. O site "Resolver online" pode pedir um cadastro grátis; o PDF e o gabarito abrem direto.</p>`;
+  PROVAS.forEach(pv=>{h+=`<div class="erro"><div class="e">${esc(pv.n)}</div><div class="acoes"><a class="btn" href="${urlOnline(pv)}" target="_blank">Resolver online</a><a class="btn" href="${urlPdf(pv)}" target="_blank">PDF da prova</a><a class="btn" href="${urlGab(pv)}" target="_blank">Gabarito</a></div></div>`});
+  h+=`<button class="btn cinza grande" style="margin-top:12px" onclick="fecharModal()">Fechar</button>`;
+  abrirModal(h);
+}
+function botoesSimulado(n){
+  const pv=PROVAS[SIMULADO[n]];
+  return `<div class="acoes" style="flex-direction:column;align-items:stretch"><a class="btn" href="${urlPdf(pv)}" target="_blank">📄 Prova: ${esc(pv.n)}</a><a class="btn" href="${urlGab(pv)}" target="_blank">✅ Gabarito (só depois de terminar)</a></div>`;
+}
 
 /* ================== TELA HOJE ================== */
 function errosParaHoje(){
@@ -441,16 +509,16 @@ function blocoEstudo(i, travado){
   };
   let h='';
   if(x.sim){
-    h+=linha('p','Simulado',120,x.p[1],'Faça como se fosse a prova: sem consulta e cronometrado. Pegue a prova e o gabarito em "Mais → Links".','');
+    h+=linha('p','Simulado',120,x.p[1],'Faça como se fosse a prova: sem consulta, cronometrado e sem olhar o gabarito antes de terminar.',botoesSimulado(x.sim));
   } else {
     const due=errosParaHoje().length;
-    h+=linha('rev','Revisão',15,'Caderno de erros + resumos de ontem e da semana passada', due?`<a href="#" onclick="irPara('cad');return false">${due} erro(s) do caderno para revisar hoje</a>`:'Releia os resumos e as regras do caderno de erros.','');
+    if(i>0) h+=linha('rev','Revisão',15,'Caderno de erros + resumos de ontem e da semana passada', due?`<a href="#" onclick="irPara('cad');return false">${due} erro(s) do caderno para revisar hoje</a>`:'Releia os resumos e as regras do caderno de erros.','');
+    else h+=`<div class="peq" style="padding:4px 0 10px">Primeiro dia: ainda não tem nada para revisar. Comece seu caderno de erros hoje, ele entra na revisão a partir de amanhã.</div>`;
     const dp = x.q ? 'Só questões e revisão, sem aula nova. Cada erro vai para o caderno.' : '35 min de aula + resumo · 25 min de questões';
     const ds = x.q ? 'Só questões e revisão. Cada erro vai para o caderno.' : '25 min de aula + resumo · 15 min de questões';
-    const bt=(t)=> x.q ? `<div class="acoes"><a class="btn" href="${qc()}" target="_blank">✎ Questões</a></div>` : `<div class="acoes"><a class="btn" href="${yt(t)}" target="_blank">▶ Aula no YouTube</a><a class="btn" href="${qc()}" target="_blank">✎ Questões</a></div>`;
-    h+=linha('p',x.p[0],60,x.p[1],dp,bt(x.p[1]));
+    h+=linha('p',x.p[0],60,x.p[1],dp,botoes(i,'p'));
     h+=`<div class="peq" style="padding:2px 0 8px 46px">☕ Pausa de 5 min</div>`;
-    h+=linha('s',x.s[0],40,x.s[1],ds,bt(x.s[1]));
+    h+=linha('s',x.s[0],40,x.s[1],ds,botoes(i,'s'));
   }
   return h;
 }
@@ -655,13 +723,12 @@ function detalheBloco(tag,min,tit,desc,links){
 }
 function verDia(i){
   const x=STUDY[i], st=S.estudo[i]||{}, me=modoEstudo(), atE=estudoAtual();
-  const lk=t=> x.q ? `<div class="acoes"><a class="btn" href="${qc()}" target="_blank">✎ Questões</a></div>` : `<div class="acoes"><a class="btn" href="${yt(t)}" target="_blank">▶ Aula no YouTube</a><a class="btn" href="${qc()}" target="_blank">✎ Questões</a></div>`;
   let h=`<h3>Dia ${i+1} · Semana ${semanaDe(i)}</h3><div class="meta">${st.feito?`✓ Feito em ${br(st.feito)}`:i===atE?'Este é o próximo dia da fila':'Ainda não chegou na fila'}</div>`;
-  if(x.sim){ h+=detalheBloco('Simulado',120,x.p[1],'Sem consulta e cronometrado. Pegue a prova e o gabarito em Mais → Links.',''); }
+  if(x.sim){ h+=detalheBloco('Simulado',120,x.p[1],'Sem consulta e cronometrado.',botoesSimulado(x.sim)); }
   else {
-    h+=detalheBloco('Revisão',15,'Caderno de erros + resumos de ontem e da semana passada','Releia os resumos e as regras do caderno.','');
-    h+=detalheBloco(x.p[0],60,x.p[1],x.q?'Só questões e revisão.':'35 min de aula + resumo · 25 min de questões',lk(x.p[1]));
-    h+=detalheBloco(x.s[0],40,x.s[1],x.q?'Só questões e revisão.':'25 min de aula + resumo · 15 min de questões',lk(x.s[1]));
+    if(i>0) h+=detalheBloco('Revisão',15,'Caderno de erros + resumos de ontem e da semana passada','Releia os resumos e as regras do caderno.','');
+    h+=detalheBloco(x.p[0],60,x.p[1],x.q?'Só questões e revisão.':'35 min de aula + resumo · 25 min de questões',botoes(i,'p'));
+    h+=detalheBloco(x.s[0],40,x.s[1],x.q?'Só questões e revisão.':'25 min de aula + resumo · 15 min de questões',botoes(i,'s'));
   }
   if(i===atE && !ativo(me)) h+=`<button class="btn laranja grande" style="margin-top:12px" onclick="adiantar()">Fazer este dia hoje</button>`;
   else if(i>atE && atE>=0 && !st.feito) h+=`<div class="peq" style="margin-top:10px">Para fazer este dia, conclua antes os dias que vêm antes dele. A fila segue em ordem para nenhum assunto ficar para trás.</div>`;
@@ -721,7 +788,8 @@ function telaMais(){
   <button class="menu-item" onclick="testarAviso()">Testar notificação <span>${nat?'chega em 5 s':'só no app instalado'} ›</span></button>
   </div>`;
   h+=`<div class="card"><h2>Como fazer os exercícios</h2>${Object.keys(COMO).map(k=>`<button class="menu-item" onclick="como('${k}')">${esc(COMO[k][0])} <span>›</span></button>`).join('')}</div>`;
-  h+=`<div class="card"><h2>Links</h2>${LINKS.map(l=>`<a class="menu-item" style="text-decoration:none;color:inherit" href="${l[1]}" target="_blank">${esc(l[0])} <span>↗</span></a>`).join('')}<div class="peq" style="margin-top:8px">Para os simulados, use provas de outros OGMOs no site do IDCAP (Santos, Rio de Janeiro, Angra dos Reis, Santarém): mesma banca e mesmo tipo de cargo.</div></div>`;
+  h+=`<div class="card"><h2>Links</h2>${LINKS.map(l=>`<a class="menu-item" style="text-decoration:none;color:inherit" href="${l[1]}" target="_blank">${esc(l[0])} <span>↗</span></a>`).join('')}</div>`;
+  h+=`<div class="card"><h2>Provas reais de OGMO (IDCAP)</h2>${PROVAS.map(pv=>`<div class="erro"><div class="e">${esc(pv.n)}</div><div class="acoes"><a class="btn" href="${urlOnline(pv)}" target="_blank">Resolver online</a><a class="btn" href="${urlPdf(pv)}" target="_blank">PDF</a><a class="btn" href="${urlGab(pv)}" target="_blank">Gabarito</a></div></div>`).join('')}</div>`;
   h+=`<div class="card"><h2>Como o plano funciona</h2><div class="amanha">
   • <b>A fila:</b> são 40 dias de estudo e 48 treinos em ordem. Cada dia você faz o próximo. Se faltar, amanhã aparece o mesmo, e nunca dois de uma vez.<br>
   • <b>Domingo:</b> se ficou estudo pendente na semana, recupere um no domingo. Domingo nunca tem treino.<br>
@@ -732,7 +800,7 @@ function telaMais(){
   <button class="menu-item" onclick="exportar()">Fazer backup <span>›</span></button>
   <button class="menu-item" onclick="importar()">Restaurar backup <span>›</span></button>
   <button class="menu-item" style="color:#c0392b" onclick="zerar()">Apagar tudo e recomeçar <span>›</span></button></div>
-  <div class="peq" style="text-align:center;margin:6px 0 16px">Plano OGMO · versão 1.1</div>`;
+  <div class="peq" style="text-align:center;margin:6px 0 16px">Plano OGMO · versão 1.2</div>`;
   $('#t-mais').innerHTML=h;
 }
 function pausasFuturas(){const h=hojeISO();return S.pausas.filter(p=>p>=h).sort()}
