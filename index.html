@@ -77,6 +77,16 @@ nav button.on{color:var(--azul)}
 .cel.f{background:var(--verde);color:#fff}
 .cel.a{background:var(--azul);color:#fff}
 .cel.v{background:transparent}
+button.cel{width:100%;border:0;font:inherit;font-size:11px;font-weight:600}
+.dia{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:12px 0;border-top:1px solid var(--linha)}
+.dia:first-of-type{border-top:0}
+.dia .st{flex:0 0 26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;background:#eef0f3;color:var(--sub)}
+.dia .st.f{background:var(--verde);color:#fff}
+.dia .st.a{background:var(--azul);color:#fff}
+.dia .tx{flex:1;min-width:0;font-size:14px;line-height:1.4;color:var(--sub)}
+.dia .tx b{color:var(--txt);font-size:15px}
+.semtit{font-weight:700;color:var(--navy);margin:16px 0 2px;font-size:15px}
+.semtit:first-child{margin-top:0}
 table.t{width:100%;border-collapse:collapse;font-size:14px}
 table.t td,table.t th{padding:8px 4px;border-top:1px solid var(--linha);text-align:left}
 table.t th{color:var(--sub);font-weight:600;border-top:0}
@@ -125,6 +135,7 @@ textarea.inp{min-height:76px;resize:vertical}
 
 <main>
   <section class="tela on" id="t-hoje"></section>
+  <section class="tela" id="t-plano"></section>
   <section class="tela" id="t-prog"></section>
   <section class="tela" id="t-cad"></section>
   <section class="tela" id="t-mais"></section>
@@ -132,6 +143,7 @@ textarea.inp{min-height:76px;resize:vertical}
 
 <nav>
   <button data-t="hoje" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18M8.5 15l2.5 2.5 4.5-5"/></svg>Hoje</button>
+  <button data-t="plano"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h12M9 12h12M9 18h12"/><circle cx="4" cy="6" r="1.5"/><circle cx="4" cy="12" r="1.5"/><circle cx="4" cy="18" r="1.5"/></svg>Plano</button>
   <button data-t="prog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Progresso</button>
   <button data-t="cad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h12a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4z"/><path d="M8 9h8M8 13h6"/></svg>Caderno</button>
   <button data-t="mais"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Mais</button>
@@ -310,25 +322,32 @@ function esperadoAte(dISO){
   while(d<=fim && n<STUDY.length){ if(diaUtil(d)&&!pausado(iso(d))) n++; d=addDias(d,1); }
   return n;
 }
-function atraso(){
+function feitosEm(dISO){return Object.keys(S.estudo).map(Number).filter(k=>S.estudo[k]&&S.estudo[k].feito===dISO).sort((a,b)=>a-b)}
+// saldo > 0: dias adiantados; saldo < 0: dias pendentes
+function saldo(){
   const h=hojeISO(), d=parse(h);
   let esp = esperadoAte(h);
   if(diaUtil(d) && !pausado(h) && estudoFeitoEm(h)===null && esp>0) esp--; // hoje ainda está em andamento
-  return Math.max(0, esp - estudoFeitos());
+  return estudoFeitos() - esp;
 }
+function atraso(){return Math.max(0,-saldo())}
+function adiantado(){return Math.max(0,saldo())}
+function parcial(i){const st=S.estudo[i];return !!(i>=0&&st&&!st.feito&&partes(i).some(p=>st[p]))}
 function modoEstudo(){
   const h=hojeISO(), d=parse(h), w=d.getDay();
-  const feitoHoje = estudoFeitoEm(h);
-  if(feitoHoje!==null) return {modo:'feito', i:feitoHoje};
   if(!S.inicio) return {modo:'nada'};
-  if(h<S.inicio) return {modo:'antes', i:0};
-  const at = estudoAtual();
-  if(at<0) return {modo:'fim'};
-  if(pausado(h)) return {modo:'pausa'};
-  if(w>=1&&w<=5) return {modo:'estudo', i:at};
-  if(w===0) return atraso()>0 ? {modo:'recuperar', i:at} : {modo:'folga'};
-  return {modo:'sabado', i:at};
+  const feitos=feitosEm(h), at=estudoAtual();
+  if(h<S.inicio && !feitos.length && S.extra!==h && !parcial(at)) return {modo:'antes', i:0};
+  if(at<0) return feitos.length?{modo:'feito',i:feitos[feitos.length-1],feitos,prox:-1}:{modo:'fim'};
+  if(S.extra===h || parcial(at)) return {modo:'extra', i:at, feitos};
+  if(feitos.length) return {modo:'feito', i:feitos[feitos.length-1], feitos, prox:at};
+  if(pausado(h)) return {modo:'pausa', i:at};
+  if(h>=S.inicio && w>=1&&w<=5) return {modo:'estudo', i:at};
+  if(w===0 && atraso()>0) return {modo:'recuperar', i:at};
+  return {modo: w===6?'sabado':'folga', i:at};
 }
+function ativo(me){return me.modo==='estudo'||me.modo==='recuperar'||me.modo==='extra'}
+function adiantar(){S.extra=hojeISO();salvar();irPara('hoje');fecharModal();toast('Bom estudo! Esse dia conta como adiantado.')}
 function modoTreino(){
   const h=hojeISO(), w=parse(h).getDay();
   const feitoHoje=treinoFeitoEm(h);
@@ -462,26 +481,35 @@ function telaHoje(){
   const h=hojeISO(), d=parse(h);
   let html='';
   if(!S.inicio){$('#t-hoje').innerHTML='';return;}
-  const at=atraso();
+  const at=atraso(), ad=adiantado();
+  if(ad>0 && me.modo!=='fim'){
+    const pf=previsaoFim();
+    html+=`<div class="ok"><b>Você está ${ad} dia(s) adiantado(a)!</b>${pf?` Previsão de término: <b>${br(pf)}</b>.`:''}</div>`;
+  }
   if(at>0 && me.modo!=='fim'){
     const pf=previsaoFim();
     html+=`<div class="aviso"><b>${at} dia(s) de estudo pendente(s).</b> ${d.getDay()===0?'Hoje é domingo: dá para recuperar um agora.':'Recupere no domingo ou siga a fila normalmente.'}${pf?` Previsão de término: <b>${br(pf)}</b>.`:''}</div>`;
   }
   // ESTUDO
   html+=`<div class="card"><h2>📚 Estudo</h2>`;
-  if(me.modo==='estudo'||me.modo==='recuperar'||me.modo==='feito'){
+  const btnAd=(i,txt)=>i>=0?`<button class="btn laranja grande" style="margin-top:10px" onclick="adiantar()">${txt} · Dia ${i+1}</button>`:'';
+  if(ativo(me)||me.modo==='feito'){
     const i=me.i;
-    html+=`<div class="meta">Dia ${i+1} de ${STUDY.length} · Semana ${semanaDe(i)}${me.modo==='recuperar'?' · <b style="color:var(--laranja)">Recuperação de domingo</b>':''}${me.modo==='feito'?' · <b style="color:var(--verde)">Concluído hoje ✓</b>':''}</div>`;
+    const extraTxt = me.modo==='extra' ? ' · <b style="color:var(--laranja)">Adiantando</b>' : '';
+    const outros = me.feitos && me.feitos.length>1 ? ` · ${me.feitos.length} dias feitos hoje` : '';
+    html+=`<div class="meta">Dia ${i+1} de ${STUDY.length} · Semana ${semanaDe(i)}${me.modo==='recuperar'?' · <b style="color:var(--laranja)">Recuperação de domingo</b>':''}${extraTxt}${me.modo==='feito'?' · <b style="color:var(--verde)">Concluído hoje ✓</b>':''}${outros}</div>`;
     html+=blocoEstudo(i,false);
+    if(me.modo==='feito' && me.prox>=0) html+=`<div class="amanha" style="margin-top:12px;border-top:1px solid var(--linha);padding-top:12px">Ainda tem energia hoje? Você pode adiantar o próximo dia. Ele sai da fila e o plano termina antes.</div>`+btnAd(me.prox,'Adiantar o próximo');
   } else if(me.modo==='antes'){
-    html+=`<div class="vazio"><div class="grande">🗓️</div>Seu plano começa em <b>${br(S.inicio)}</b> (${DIAS[parse(S.inicio).getDay()]}).<br><br><span class="amanha">Dia 1: <b>${esc(resumoEstudo(0))}</b></span></div>`;
+    html+=`<div class="vazio"><div class="grande">🗓️</div>Seu plano começa em <b>${br(S.inicio)}</b> (${DIAS[parse(S.inicio).getDay()]}).<br><br><span class="amanha">Dia 1: <b>${esc(resumoEstudo(0))}</b></span></div>`+btnAd(0,'Começar já');
   } else if(me.modo==='sabado'){
-    html+=`<div class="vazio"><div class="grande">🏃</div>Sábado não tem estudo, só treino.${at>0?'<br>Amanhã, domingo, dá para recuperar o que ficou pendente.':''}</div>`;
+    html+=`<div class="vazio"><div class="grande">🏃</div>Sábado não tem estudo, só treino.${at>0?'<br>Amanhã, domingo, dá para recuperar o que ficou pendente.':''}</div>`+btnAd(me.i,'Quero estudar hoje');
   } else if(me.modo==='folga'){
-    html+=`<div class="vazio"><div class="grande">😌</div>Domingo de folga: não ficou nada pendente na semana.</div>`;
+    html+=`<div class="vazio"><div class="grande">😌</div>Domingo de folga: não ficou nada pendente na semana.</div>`+btnAd(me.i,'Quero estudar hoje');
   } else if(me.modo==='pausa'){
-    html+=`<div class="vazio"><div class="grande">⏸️</div>Você está em pausa hoje. A fila continua de onde parou quando a pausa acabar.</div>`;
-  } else if(me.modo==='fim'){
+    html+=`<div class="vazio"><div class="grande">⏸️</div>Você está em pausa hoje. A fila continua de onde parou quando a pausa acabar.</div>`+btnAd(me.i,'Quero estudar hoje');
+  }
+  if(me.modo!=='fim') html+=`<button class="btn cinza grande" style="margin-top:10px" onclick="irPara('plano')">Ver todos os dias do plano</button>`; else if(me.modo==='fim'){
     html+=`<div class="vazio"><div class="grande">🏆</div><b>Você terminou os 40 dias de estudo!</b><br><br><div style="text-align:left" class="amanha">Agora é o <b>modo manutenção</b> até a prova:<br>• 15 min de caderno de erros + 60 min de questões da matéria principal + 40 min da secundária, seguindo a mesma divisão da semana.<br>• A cada 2 semanas, um simulado de 50 questões.<br>• Toda semana, olhe se saiu edital no site do IDCAP.</div></div>`;
   }
   html+=`</div>`;
@@ -509,7 +537,7 @@ function telaHoje(){
 function previaAmanha(){
   let ie=estudoAtual(), it=treinoAtual();
   const me=modoEstudo(), mt=modoTreino();
-  if(ie>=0 && (me.modo==='estudo'||me.modo==='recuperar')) ie = ie+1<STUDY.length ? ie+1 : -1;
+  if(ie>=0 && ativo(me)) ie = ie+1<STUDY.length ? ie+1 : -1;
   if(it>=0 && mt.modo==='treino') it = it+1<TRAIN.length ? it+1 : -1;
   const h=hojeISO(); const am=addDias(parse(h),1); const w=am.getDay();
   if(S.inicio && h<S.inicio) return '';
@@ -525,11 +553,11 @@ function previaAmanha(){
 function marcarEstudo(i,parte){
   const h=hojeISO();
   const me=modoEstudo();
-  if(!(me.i===i && (me.modo==='estudo'||me.modo==='recuperar'||me.modo==='feito'))) return;
+  if(!(me.i===i && (ativo(me)||me.modo==='feito'))) return;
   const st=S.estudo[i]||(S.estudo[i]={});
   st[parte]=!st[parte];
   const completo=partes(i).every(p=>st[p]);
-  if(completo && !st.feito){st.feito=h; toast(`Dia ${i+1} concluído! 🎉`);}
+  if(completo && !st.feito){st.feito=h; if(S.extra===h) S.extra=null; toast(`Dia ${i+1} concluído! 🎉`);}
   if(!completo && st.feito===h) st.feito=null;
   salvar(); render();
 }
@@ -549,7 +577,8 @@ function salvarTeste(i,campo,v){
 function progressoDia(){
   const me=modoEstudo(), mt=modoTreino();
   let tot=0, ok=0;
-  if(['estudo','recuperar','feito'].includes(me.modo)){const st=S.estudo[me.i]||{};partes(me.i).forEach(p=>{tot++;if(st[p])ok++;});}
+  const idx=new Set(feitosEm(hojeISO())); if(ativo(me)) idx.add(me.i);
+  idx.forEach(i=>{const st=S.estudo[i]||{};partes(i).forEach(p=>{tot++;if(st[p])ok++;});});
   if(['treino','feito'].includes(mt.modo)){tot++;if(S.treino[mt.i])ok++;}
   return tot?Math.round(100*ok/tot):100;
 }
@@ -590,11 +619,63 @@ function telaProg(){
       let cls='cel', txt=DIAS3[d+1];
       if(d<5){ if(fe&&ft) cls+=' f'; else if(ei===atE||ti===atT) cls+=' a'; }
       else { if(ft) cls+=' f'; else if(ti===atT) cls+=' a'; }
-      h+=`<div class="${cls}">${txt}</div>`;
+      h+=`<button class="${cls}" onclick="${d<5?`verDia(${ei})`:`verTreino(${ti})`}">${txt}</button>`;
     }
   }
-  h+=`</div><div class="peq" style="margin-top:8px">Cada quadrado é um dia do plano (estudo + treino), não uma data do calendário.</div></div>`;
+  h+=`</div><div class="peq" style="margin-top:8px">Cada quadrado é um dia do plano (estudo + treino), não uma data do calendário. Toque para ver o que tem nele.</div></div>`;
   $('#t-prog').innerHTML=h;
+}
+
+/* ================== PLANO (consulta) ================== */
+let abaPlano='estudo';
+function telaPlano(){
+  const atE=estudoAtual(), atT=treinoAtual();
+  let h=`<div class="card"><h2>Plano completo</h2><div class="meta">Toque num dia para ver o conteúdo, os links e o treino. Aqui é só consulta: o que você marca fica na tela Hoje.</div>
+  <div class="chips"><button class="chip ${abaPlano==='estudo'?'on':''}" onclick="abaPlano='estudo';telaPlano()">📚 Estudo (40 dias)</button><button class="chip ${abaPlano==='treino'?'on':''}" onclick="abaPlano='treino';telaPlano()">🏃 Treino (48)</button></div></div>`;
+  h+=`<div class="card">`;
+  if(abaPlano==='estudo'){
+    STUDY.forEach((x,i)=>{
+      if(i%5===0) h+=`<div class="semtit">Semana ${i/5+1}${i>=30?' · revisão e simulados':''}</div>`;
+      const st=S.estudo[i]||{}, f=!!st.feito, a=i===atE;
+      const txt = x.sim ? x.p[1] : `${x.p[0]}: ${x.p[1]}<br>${x.s[0]}: ${x.s[1]}`;
+      h+=`<button class="dia" onclick="verDia(${i})"><span class="st ${f?'f':a?'a':''}">${f?'✓':i+1}</span><span class="tx"><b>Dia ${i+1}</b>${f?` · feito em ${br(st.feito)}`:a?' · próximo':''}<br>${esc(txt).replace(/&lt;br&gt;/g,'<br>')}</span></button>`;
+    });
+  } else {
+    TRAIN.forEach((t,i)=>{
+      if(i%6===0) h+=`<div class="semtit">Semana ${t.semana}</div>`;
+      const f=!!S.treino[i], a=i===atT;
+      h+=`<button class="dia" onclick="verTreino(${i})"><span class="st ${f?'f':a?'a':''}">${f?'✓':i+1}</span><span class="tx"><b>${DIAS3[(i%6)+1]} · ${t.tipo==='forca'?'Força':'Corrida'}${t.teste?' · 🏁 teste':''}</b>${f?` · feito em ${br(S.treino[i])}`:a?' · próximo':''}<br>${esc(t.itens.join(' · '))}</span></button>`;
+    });
+  }
+  h+=`</div>`;
+  $('#t-plano').innerHTML=h;
+}
+function detalheBloco(tag,min,tit,desc,links){
+  return `<div class="item"><div class="corpo"><div class="tit"><span class="tag" style="background:${(CORES[tag]||'#1f6fb2')}1a;color:${CORES[tag]||'#1f6fb2'}">${esc(tag)}</span><span class="tag min">${min} min</span></div><div class="tit" style="margin-top:5px">${esc(tit)}</div><div class="desc">${desc}</div>${links||''}</div></div>`;
+}
+function verDia(i){
+  const x=STUDY[i], st=S.estudo[i]||{}, me=modoEstudo(), atE=estudoAtual();
+  const lk=t=> x.q ? `<div class="acoes"><a class="btn" href="${qc()}" target="_blank">✎ Questões</a></div>` : `<div class="acoes"><a class="btn" href="${yt(t)}" target="_blank">▶ Aula no YouTube</a><a class="btn" href="${qc()}" target="_blank">✎ Questões</a></div>`;
+  let h=`<h3>Dia ${i+1} · Semana ${semanaDe(i)}</h3><div class="meta">${st.feito?`✓ Feito em ${br(st.feito)}`:i===atE?'Este é o próximo dia da fila':'Ainda não chegou na fila'}</div>`;
+  if(x.sim){ h+=detalheBloco('Simulado',120,x.p[1],'Sem consulta e cronometrado. Pegue a prova e o gabarito em Mais → Links.',''); }
+  else {
+    h+=detalheBloco('Revisão',15,'Caderno de erros + resumos de ontem e da semana passada','Releia os resumos e as regras do caderno.','');
+    h+=detalheBloco(x.p[0],60,x.p[1],x.q?'Só questões e revisão.':'35 min de aula + resumo · 25 min de questões',lk(x.p[1]));
+    h+=detalheBloco(x.s[0],40,x.s[1],x.q?'Só questões e revisão.':'25 min de aula + resumo · 15 min de questões',lk(x.s[1]));
+  }
+  if(i===atE && !ativo(me)) h+=`<button class="btn laranja grande" style="margin-top:12px" onclick="adiantar()">Fazer este dia hoje</button>`;
+  else if(i>atE && atE>=0 && !st.feito) h+=`<div class="peq" style="margin-top:10px">Para fazer este dia, conclua antes os dias que vêm antes dele. A fila segue em ordem para nenhum assunto ficar para trás.</div>`;
+  h+=`<button class="btn cinza grande" style="margin-top:10px" onclick="fecharModal()">Fechar</button>`;
+  abrirModal(h);
+}
+function verTreino(i){
+  const t=TRAIN[i];
+  let h=`<h3>Treino ${i+1} · Semana ${t.semana}</h3><div class="meta">${t.tipo==='forca'?'Força':'Corrida'} · cerca de ${t.min} min${S.treino[i]?` · ✓ feito em ${br(S.treino[i])}`:''}</div>`;
+  h+=`<div class="ex"><span>Aquecimento 5 min + volta à calma 5 min</span><button class="btn q" onclick="como('aquecimento')">Como fazer</button></div>`;
+  t.itens.forEach(it=>{const k=chaveComo(it);h+=`<div class="ex"><span>${esc(it)}</span>${k?`<button class="btn q" onclick="como('${k}')">Como fazer</button>`:''}</div>`});
+  h+=`<div class="peq" style="margin-top:10px">O treino não dá para adiantar: o descanso entre um treino e outro faz parte da preparação.</div>`;
+  h+=`<button class="btn cinza grande" style="margin-top:10px" onclick="fecharModal()">Fechar</button>`;
+  abrirModal(h);
 }
 
 /* ================== CADERNO ================== */
@@ -651,7 +732,7 @@ function telaMais(){
   <button class="menu-item" onclick="exportar()">Fazer backup <span>›</span></button>
   <button class="menu-item" onclick="importar()">Restaurar backup <span>›</span></button>
   <button class="menu-item" style="color:#c0392b" onclick="zerar()">Apagar tudo e recomeçar <span>›</span></button></div>
-  <div class="peq" style="text-align:center;margin:6px 0 16px">Plano OGMO · versão 1.0</div>`;
+  <div class="peq" style="text-align:center;margin:6px 0 16px">Plano OGMO · versão 1.1</div>`;
   $('#t-mais').innerHTML=h;
 }
 function pausasFuturas(){const h=hojeISO();return S.pausas.filter(p=>p>=h).sort()}
@@ -737,6 +818,7 @@ async function agendar(){
       let e=null, t=null;
       if(k===0){
         const me=modoEstudo(); if((me.modo==='estudo'||me.modo==='recuperar')&&!feitoE){e=me.i;si++;if(me.modo==='recuperar')pendDom--;}
+        else if(me.modo==='extra') si++;
         const mt=modoTreino(); if(mt.modo==='treino'&&!feitoT){t=mt.i;ti++;}
       } else {
         if(si>=0&&si<STUDY.length){ if(w>=1&&w<=5){e=si;si++;} else if(w===0&&pendDom>0){e=si;si++;pendDom--;} }
@@ -798,7 +880,7 @@ function render(){
   $('#ola').textContent='Olá'+(S.nome?', '+S.nome:'')+'!';
   $('#dataHoje').textContent=DIAS[d.getDay()][0].toUpperCase()+DIAS[d.getDay()].slice(1)+', '+br(iso(d));
   const p=progressoDia(); $('#barraDia').style.width=p+'%'; $('#pctDia').textContent=p+'%';
-  if(abaAtual==='hoje')telaHoje(); else if(abaAtual==='prog')telaProg(); else if(abaAtual==='cad')telaCad(); else telaMais();
+  if(abaAtual==='hoje')telaHoje(); else if(abaAtual==='plano')telaPlano(); else if(abaAtual==='prog')telaProg(); else if(abaAtual==='cad')telaCad(); else telaMais();
 }
 let _ultDia=hojeISO();
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){render();agendar();_ultDia=hojeISO();}});
